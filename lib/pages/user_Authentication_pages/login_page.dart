@@ -1,6 +1,6 @@
-import 'package:bconnect/pages/home_page.dart';
+import 'package:bconnect/Layout/landing.dart';
 import "package:flutter/material.dart";
-import 'package:bconnect/constrant.dart';
+import 'package:bconnect/components/constrant.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +27,7 @@ class _Login extends State<Login> {
         child: SingleChildScrollView(
           padding: EdgeInsets.all(size.height * 0.03),
           child: OverflowBar(
-            overflowSpacing: size.height * 0.014,
+            overflowSpacing: size.height * 0.024,
             overflowAlignment: OverflowBarAlignment.center,
             children: [
               Image.asset(image1),
@@ -85,7 +85,7 @@ class _Login extends State<Login> {
               CupertinoButton(
                   padding: EdgeInsets.zero,
                   onPressed: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const Home()));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const Landing()));
                   },
                   child: Container(
                     alignment: Alignment.center,
@@ -102,11 +102,11 @@ class _Login extends State<Login> {
                   )
                   ),
               SizedBox(
-                height: size.height * 0.014,
+                height: size.height * 0.00001,
               ),
               SvgPicture.asset("assets/icon/deisgn.svg"),
               SizedBox(
-                height: size.height * 0.014,
+                height: size.height * 0.00001,
               ),
               CupertinoButton(
                   padding: EdgeInsets.zero,
