@@ -12,6 +12,7 @@ class Notifications extends StatefulWidget {
   const Notifications({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _NotificationsState createState() => _NotificationsState();
 }
 
@@ -66,7 +67,7 @@ class NotificationCard extends StatelessWidget {
   final NotificationItem notification;
   final String timeElapsed;
 
-  NotificationCard({required this.notification, required this.timeElapsed});
+  const NotificationCard({super.key, required this.notification, required this.timeElapsed});
 
   @override
   Widget build(BuildContext context) {
