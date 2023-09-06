@@ -53,7 +53,7 @@ class _LandingState extends State<Landing> {
         Container(
           color: Colors.blue,
           alignment: Alignment.center,
-          child: const Notifications(),
+          child: Notifications(),
         ),
         Container(
           color: Colors.blue,
