@@ -97,7 +97,9 @@ class _LandingState extends State<Landing> {
             icon: Icon(Icons.search_off_outlined,color: Colors.white),
             label: 'Search',
           ),
+          
           NavigationDestination(
+            
             selectedIcon: CircleAvatar(
               backgroundColor: Colors.white,
               child: Icon(
@@ -135,6 +137,7 @@ class _LandingState extends State<Landing> {
     );
   }
 }
+
 
 class NavDrawer extends StatelessWidget {
   const NavDrawer({super.key});

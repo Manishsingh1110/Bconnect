@@ -13,11 +13,17 @@ class Login extends StatefulWidget {
 }
 
 class _Login extends State<Login> {
+  final formkey = GlobalKey<FormState>();
+  var email = TextEditingController();
+  var password = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
+        body: Form(
+      key: formkey,
+      child: Container(
         height: double.maxFinite,
         decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -49,10 +55,34 @@ class _Login extends State<Login> {
                   color: kWhiteColor,
                 ),
               ),
-              TextField(
-                keyboardType: TextInputType.text,
+              TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Enter a Email";
+                  }
+                  bool val = RegExp(
+                          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                      .hasMatch(value);
+                  if (!val) {
+                    return "Enter a valid Email";
+                  }
+                  return null;
+                },
+                controller: email,
+                keyboardType: TextInputType.emailAddress,
                 style: const TextStyle(color: kInputColor),
                 decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide:
+                          const BorderSide(color: Colors.red, width: 1.2),
+                    ),
+                    errorStyle: const TextStyle(
+                        fontSize: 16.0, color: Colors.white),
                     contentPadding: const EdgeInsets.symmetric(vertical: 25),
                     filled: true,
                     hintText: "E-mail",
@@ -65,11 +95,32 @@ class _Login extends State<Login> {
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(40))),
               ),
-              TextField(
+              TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Enter a Password";
+                  }
+
+                  if (value.length <= 5) {
+                    return "Minimum Length of the password is 5";
+                  }
+                  return null;
+                },
+                controller: password,
                 obscureText: true,
                 keyboardType: TextInputType.text,
                 style: const TextStyle(color: kInputColor),
                 decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ), errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide:
+                          const BorderSide(color: Colors.red, width: 1.2),
+                    ),
+                    errorStyle: const TextStyle(
+                        fontSize: 16.0, color: Colors.white),
                     contentPadding: const EdgeInsets.symmetric(vertical: 25),
                     filled: true,
                     hintText: "Password",
@@ -85,7 +136,19 @@ class _Login extends State<Login> {
               CupertinoButton(
                   padding: EdgeInsets.zero,
                   onPressed: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const Landing()));
+                    final form = formkey.currentState!;
+                    if (form.validate()) {
+                      if (email.text == "Manish@gmail.com" ||
+                          password.text == "123456") {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Landing()));
+                      }
+                    } else {
+                      // ignore: avoid_print
+                      print(email.text);
+                    }
                   },
                   child: Container(
                     alignment: Alignment.center,
@@ -99,15 +162,8 @@ class _Login extends State<Login> {
                       style: TextStyle(
                           color: kWhiteColor, fontWeight: FontWeight.w600),
                     ),
-                  )
-                  ),
-              SizedBox(
-                height: size.height * 0.00001,
-              ),
+                  )),
               SvgPicture.asset("assets/icon/deisgn.svg"),
-              SizedBox(
-                height: size.height * 0.00001,
-              ),
               CupertinoButton(
                   padding: EdgeInsets.zero,
                   onPressed: () {},
@@ -130,12 +186,11 @@ class _Login extends State<Login> {
                       style: TextStyle(
                           color: kWhiteColor, fontWeight: FontWeight.w600),
                     ),
-                  )
-                  ),
+                  )),
             ],
           ),
         ),
       ),
-    );
+    ));
   }
 }
