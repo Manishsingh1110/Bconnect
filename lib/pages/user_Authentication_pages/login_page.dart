@@ -5,6 +5,7 @@ import 'package:bconnect/components/constrant.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
 
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -101,7 +102,6 @@ class _Login extends State<Login> {
                   if (value!.isEmpty) {
                     return "Enter a Password";
                   }
-
                   if (value.length <= 5) {
                     return "Minimum Length of the password is 5";
                   }
