@@ -288,6 +288,98 @@ class SocialMediaPostCard extends StatelessWidget {
             ),
           ],
         );
+      } else if (postImages!.length == 5) {
+        postContent = Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Hero(
+                    tag: postImages![0], // Unique tag for the first image
+                    child: GestureDetector(
+                      onTap: () {
+                        _showImageDialog(context, postImages![0]);
+                      },
+                      child: Image.asset(
+                        postImages![0],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8.0), // Add spacing between images
+                Expanded(
+                  flex: 1,
+                  child: Hero(
+                    tag: postImages![1], // Unique tag for the second image
+                    child: GestureDetector(
+                      onTap: () {
+                        _showImageDialog(context, postImages![1]);
+                      },
+                      child: Image.asset(
+                        postImages![1],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8.0), // Add spacing between rows
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Hero(
+                    tag: postImages![2], // Unique tag for the third image
+                    child: GestureDetector(
+                      onTap: () {
+                        _showImageDialog(context, postImages![2]);
+                      },
+                      child: Image.asset(
+                        postImages![2],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8.0), // Add spacing between images
+                Expanded(
+                  flex: 1,
+                  child: Hero(
+                    tag: postImages![3], // Unique tag for the fourth image
+                    child: GestureDetector(
+                      onTap: () {
+                        _showImageDialog(context, postImages![3]);
+                      },
+                      child: Image.asset(
+                        postImages![3],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8.0), // Add spacing between images
+                Expanded(
+                  flex: 1,
+                  child: Hero(
+                    tag: postImages![4], // Unique tag for the fourth image
+                    child: GestureDetector(
+                      onTap: () {
+                        _showImageDialog(context, postImages![4]);
+                      },
+                      child: Image.asset(
+                        postImages![4],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
       } else {
         // If there are more than 4 images, show a grid with "Show More" text
         // ignore: unused_local_variable
@@ -375,7 +467,7 @@ class SocialMediaPostCard extends StatelessWidget {
                     alignment: Alignment.center,
                     children: [
                       ImageFiltered(
-                        imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                        imageFilter: ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),
                         child: Image.asset(
                           postImages![4], // Use an image as a background for the text
                           fit: BoxFit.cover,
@@ -390,7 +482,7 @@ class SocialMediaPostCard extends StatelessWidget {
                           'Show More',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 10.0,
+                            fontSize: 15.0,
                           ),
                         ),
                       ),

@@ -19,9 +19,9 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications> {
   // Simulated list of notification items
   List<NotificationItem> notifications = [
-    NotificationItem('You have a new message', DateTime.now().subtract(const Duration(minutes: 2)), 'https://example.com/image1.jpg'),
-    NotificationItem('You have a new follower', DateTime.now().subtract(const Duration(hours: 1)), 'https://example.com/image2.jpg'),
-    NotificationItem('Your post was liked', DateTime.now().subtract(const Duration(hours: 2)), 'https://example.com/image3.jpg'),
+    NotificationItem('You have a new message', DateTime.now().subtract(const Duration(minutes: 2)), 'https://cdn-icons-png.flaticon.com/512/219/219969.png'),
+    NotificationItem('You have a new follower', DateTime.now().subtract(const Duration(hours: 1)), 'https://cdn-icons-png.flaticon.com/512/219/219969.png'),
+    NotificationItem('Your post was liked', DateTime.now().subtract(const Duration(hours: 2)), 'https://cdn-icons-png.flaticon.com/512/219/219969.png'),
     // Add more notification items here
   ];
 

@@ -1,4 +1,5 @@
 import 'package:bconnect/Layout/landing.dart';
+import 'package:bconnect/pages/user_Authentication_pages/signup_page.dart';
 import "package:flutter/material.dart";
 import 'package:bconnect/components/constrant.dart';
 // ignore: depend_on_referenced_packages
@@ -34,9 +35,10 @@ class _Login extends State<Login> {
         child: SingleChildScrollView(
           padding: EdgeInsets.all(size.height * 0.03),
           child: OverflowBar(
-            overflowSpacing: size.height * 0.024,
+            overflowSpacing: size.height * 0.02,
             overflowAlignment: OverflowBarAlignment.center,
             children: [
+              SizedBox(height:size.height*0.04),
               Image.asset(image1),
               Text(
                 "Welcome Back!",
@@ -84,7 +86,7 @@ class _Login extends State<Login> {
                     ),
                     errorStyle: const TextStyle(
                         fontSize: 16.0, color: Colors.white),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 25),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 20),
                     filled: true,
                     hintText: "E-mail",
                     prefixIcon: IconButton(
@@ -121,7 +123,7 @@ class _Login extends State<Login> {
                     ),
                     errorStyle: const TextStyle(
                         fontSize: 16.0, color: Colors.white),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 25),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 20),
                     filled: true,
                     hintText: "Password",
                     prefixIcon: IconButton(
@@ -153,7 +155,7 @@ class _Login extends State<Login> {
                   child: Container(
                     alignment: Alignment.center,
                     width: double.infinity,
-                    height: size.height * 0.08,
+                    height: size.height * 0.07,
                     decoration: BoxDecoration(
                         color: kButtonColor,
                         borderRadius: BorderRadius.circular(40)),
@@ -166,11 +168,16 @@ class _Login extends State<Login> {
               SvgPicture.asset("assets/icon/deisgn.svg"),
               CupertinoButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignupPage()));
+                  },
                   child: Container(
                     alignment: Alignment.center,
                     width: double.infinity,
-                    height: size.height * 0.08,
+                    height: size.height * 0.07,
                     decoration: BoxDecoration(
                         boxShadow: const [
                           BoxShadow(
