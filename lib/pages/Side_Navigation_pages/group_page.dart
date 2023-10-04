@@ -22,6 +22,7 @@ class GroupPage extends StatefulWidget {
   const GroupPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _GroupPageState createState() => _GroupPageState();
 }
 
@@ -61,11 +62,11 @@ class _GroupPageState extends State<GroupPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: kButtonColor,
         onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) =>const CreateGroupScreen()),
-    );
-  },
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CreateGroupScreen()),
+          );
+        },
         child: const Icon(Icons.add),
       ),
     );
@@ -115,15 +116,14 @@ class _GroupPageState extends State<GroupPage> {
                   const SizedBox(height: 8),
                   Row(
                     children: [
+                      // ignore: avoid_unnecessary_containers
                       Container(
-                        child: Row(
-                        children:[
-                      const Icon(Icons.date_range),
-                      const SizedBox(width: 8),
-                      Text(group.createdAt.toString()),
-                      
-                      ])
-                  )],
+                          child: Row(children: [
+                        const Icon(Icons.date_range),
+                        const SizedBox(width: 8),
+                        Text(group.createdAt.toString()),
+                      ]))
+                    ],
                   ),
                 ],
               ),
@@ -134,4 +134,3 @@ class _GroupPageState extends State<GroupPage> {
     );
   }
 }
-

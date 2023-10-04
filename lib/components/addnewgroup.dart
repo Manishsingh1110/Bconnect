@@ -6,6 +6,7 @@ class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CreateGroupScreenState createState() => _CreateGroupScreenState();
 }
 
@@ -33,9 +34,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
         groupLocation =
             "${currentPosition.latitude}, ${currentPosition.longitude}";
       });
-    } catch (e) {
-      print("Error getting location: $e");
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   // Function to pick an image from the gallery for the profile image

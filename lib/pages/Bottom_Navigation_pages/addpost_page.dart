@@ -18,9 +18,8 @@ class _AddpostState extends State<Addpost> {
     try {
       final picker = ImagePicker();
       pickedImages = await picker.pickMultiImage();
-    } on Exception catch (e) {
-      print("Error selecting images: $e");
-    }
+      // ignore: empty_catches
+    } on Exception {}
 
     setState(() {
       selectedImagePaths =

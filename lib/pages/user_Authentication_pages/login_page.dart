@@ -6,7 +6,6 @@ import 'package:bconnect/components/constrant.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
 
-
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -38,7 +37,7 @@ class _Login extends State<Login> {
             overflowSpacing: size.height * 0.02,
             overflowAlignment: OverflowBarAlignment.center,
             children: [
-              SizedBox(height:size.height*0.04),
+              SizedBox(height: size.height * 0.04),
               Image.asset(image1),
               Text(
                 "Welcome Back!",
@@ -84,8 +83,8 @@ class _Login extends State<Login> {
                       borderSide:
                           const BorderSide(color: Colors.red, width: 1.2),
                     ),
-                    errorStyle: const TextStyle(
-                        fontSize: 16.0, color: Colors.white),
+                    errorStyle:
+                        const TextStyle(fontSize: 16.0, color: Colors.white),
                     contentPadding: const EdgeInsets.symmetric(vertical: 20),
                     filled: true,
                     hintText: "E-mail",
@@ -116,13 +115,14 @@ class _Login extends State<Login> {
                 decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
-                    ), errorBorder: OutlineInputBorder(
+                    ),
+                    errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide:
                           const BorderSide(color: Colors.red, width: 1.2),
                     ),
-                    errorStyle: const TextStyle(
-                        fontSize: 16.0, color: Colors.white),
+                    errorStyle:
+                        const TextStyle(fontSize: 16.0, color: Colors.white),
                     contentPadding: const EdgeInsets.symmetric(vertical: 20),
                     filled: true,
                     hintText: "Password",
@@ -147,11 +147,7 @@ class _Login extends State<Login> {
                             MaterialPageRoute(
                                 builder: (context) => const Landing()));
                       }
-                    } else {
-                      // ignore: avoid_print
-
-                      print(email.text);
-                    }
+                    } else {}
                   },
                   child: Container(
                     alignment: Alignment.center,
@@ -171,9 +167,9 @@ class _Login extends State<Login> {
                   padding: EdgeInsets.zero,
                   onPressed: () {
                     Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignupPage()));
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignupPage()));
                   },
                   child: Container(
                     alignment: Alignment.center,
