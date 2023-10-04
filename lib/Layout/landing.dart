@@ -178,7 +178,7 @@ class NavDrawer extends StatelessWidget {
             title: const Text('Group'),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Group()));
+                  MaterialPageRoute(builder: (context) => const GroupPage()));
             },
           ),
           SizedBox(

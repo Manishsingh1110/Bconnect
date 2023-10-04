@@ -40,14 +40,14 @@ class _SplashScreenState extends State<SplashScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center, 
             children: [
-            Lottie.network(
-                'https://lottie.host/f2782a0b-c30f-48e0-b56d-a93bc0a890f9/3w6BAJx603.json',
+            Lottie.asset(
+                'assets/images/lottie.json',
                 controller: _controller,
                  onLoaded: (compos) {
               
                _controller
                 ..duration = compos.duration
-                ..forward().then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const Login())));
+                ..forward().then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const Login())));
             }),
             const SizedBox(height: 40),
             const Text("Let's Be connected ",

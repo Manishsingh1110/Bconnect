@@ -149,6 +149,7 @@ class _Login extends State<Login> {
                       }
                     } else {
                       // ignore: avoid_print
+
                       print(email.text);
                     }
                   },
