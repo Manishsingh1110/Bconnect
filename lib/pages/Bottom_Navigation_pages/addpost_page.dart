@@ -1,26 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class Addpost extends StatefulWidget {
-  const Addpost({super.key});
+  const Addpost({Key? key}) : super(key: key);
+
   @override
   State<Addpost> createState() => _AddpostState();
 }
 
 class _AddpostState extends State<Addpost> {
   final TextEditingController _postTextController = TextEditingController();
-  final List<File> _selectedImages = [];
+  List<String> selectedImagePaths = [];
 
-  Future<void> _selectImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: source);
+  Future<void> _selectImages() async {
+    List<XFile>? pickedImages;
 
-    if (pickedImage != null) {
-      setState(() {
-        _selectedImages.add(File(pickedImage.path)); // Store image as a File
-      });
+    try {
+      final picker = ImagePicker();
+      pickedImages = await picker.pickMultiImage();
+    } on Exception catch (e) {
+      print("Error selecting images: $e");
     }
+
+    setState(() {
+      selectedImagePaths =
+          (pickedImages ?? []).map((image) => image.path).toList();
+    });
+  }
+
+  void _removeImage(int index) {
+    setState(() {
+      selectedImagePaths.removeAt(index);
+    });
   }
 
   @override
@@ -28,15 +39,18 @@ class _AddpostState extends State<Addpost> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Post"),
+        backgroundColor: Colors.blue, // Change to your desired color
+        leading: IconButton(
+          icon: const Icon(Icons.clear), // Change to a cross icon
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.done),
+            icon: const Icon(Icons.check), // Icon for adding the post
             onPressed: () {
-              // Implement the logic to save the post and images here
-              // You can use _postTextController.text to get the post text
-              // and _selectedImages for selected images.
-              // Once saved, navigate back to the previous page.
-              Navigator.of(context).pop();
+              // Implement your logic to add the post here
             },
           ),
         ],
@@ -46,71 +60,89 @@ class _AddpostState extends State<Addpost> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              controller: _postTextController,
-              decoration: const InputDecoration(
-                hintText: "What's on your mind?",
-                border: OutlineInputBorder(),
+            const SizedBox(height: 16.0),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color:
+                        Colors.transparent), // Set border color to transparent
+                borderRadius:
+                    BorderRadius.circular(8.0), // Add border radius if needed
               ),
-              maxLines: 4, // Adjust the number of lines for the post text
+              child: TextField(
+                controller: _postTextController,
+                decoration: const InputDecoration(
+                  hintText: "What do you want to talk about?",
+                  contentPadding:
+                      EdgeInsets.all(16.0), // Adjust padding as needed
+                  border: InputBorder.none, // Remove border
+                ),
+                maxLines: null, // Allows dynamic height
+              ),
             ),
             const SizedBox(height: 16.0),
-            _selectedImages.isEmpty
-                ? Container() // No images selected
-                : SizedBox(
-                    height: 100.0,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _selectedImages.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Image.memory(
-                            _selectedImages[index].readAsBytesSync(),
-                            fit: BoxFit.cover,
-                          ), // Use Image.file() for file paths
-                        );
+            // Display selected images in a grid
+            GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, // Number of columns in the grid
+                crossAxisSpacing: 8.0, // Spacing between columns
+                mainAxisSpacing: 8.0, // Spacing between rows
+              ),
+              itemCount: selectedImagePaths.length,
+              shrinkWrap: true, // Wrap the grid in a SingleChildScrollView
+              physics:
+                  const NeverScrollableScrollPhysics(), // Disable scrolling in the grid
+              itemBuilder: (BuildContext context, int index) {
+                final imagePath = selectedImagePaths[index];
+                return Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _showImageDialog(context, imagePath);
                       },
+                      child: Image.network(
+                        imagePath,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-            ElevatedButton(
-              onPressed: () {
-                _showImagePickerDialog(context);
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.cancel),
+                        onPressed: () {
+                          _removeImage(index);
+                        },
+                      ),
+                    ),
+                  ],
+                );
               },
-              child: const Text("Add Image"),
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _selectImages();
+        },
+        child: const Icon(Icons.image),
+      ),
     );
   }
 
-  Future<void> _showImagePickerDialog(BuildContext context) async {
-    return showDialog<void>(
+  // Function to show the image in a dialog
+  void _showImageDialog(BuildContext context, String imagePath) {
+    showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Select Image Source"),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                ListTile(
-                  leading: const Icon(Icons.camera),
-                  title: const Text("Camera"),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    _selectImage(ImageSource.camera);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.image),
-                  title: const Text("Gallery"),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    _selectImage(ImageSource.gallery);
-                  },
-                ),
-              ],
+        return Dialog(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop(); // Close the dialog when tapped
+            },
+            child: Image.network(
+              imagePath,
+              fit: BoxFit.cover,
             ),
           ),
         );

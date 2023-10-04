@@ -63,16 +63,20 @@ class _LandingState extends State<Landing> {
       ][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
+          if (index == 2) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Addpost()));
+          } else {
+            setState(() {
+              currentPageIndex = index;
+            });
+          }
         },
         backgroundColor: navbar,
         indicatorColor: selectednav,
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            
             selectedIcon: CircleAvatar(
               backgroundColor: Colors.white,
               child: Icon(
@@ -94,12 +98,10 @@ class _LandingState extends State<Landing> {
                 color: Colors.purple,
               ),
             ),
-            icon: Icon(Icons.search_off_outlined,color: Colors.white),
+            icon: Icon(Icons.search_off_outlined, color: Colors.white),
             label: 'Search',
           ),
-          
           NavigationDestination(
-            
             selectedIcon: CircleAvatar(
               backgroundColor: Colors.white,
               child: Icon(
@@ -107,7 +109,7 @@ class _LandingState extends State<Landing> {
                 color: Colors.purple,
               ),
             ),
-            icon: Icon(Icons.post_add_outlined,color: Colors.white),
+            icon: Icon(Icons.post_add_outlined, color: Colors.white),
             label: 'Add Post',
           ),
           NavigationDestination(
@@ -118,7 +120,7 @@ class _LandingState extends State<Landing> {
                 color: Colors.purple,
               ),
             ),
-            icon: Icon(Icons.notification_add_outlined,color: Colors.white),
+            icon: Icon(Icons.notification_add_outlined, color: Colors.white),
             label: 'Notification',
           ),
           NavigationDestination(
@@ -129,7 +131,7 @@ class _LandingState extends State<Landing> {
                 color: Colors.purple,
               ),
             ),
-            icon: Icon(Icons.factory_outlined,color: Colors.white),
+            icon: Icon(Icons.factory_outlined, color: Colors.white),
             label: 'Resources',
           ),
         ],
@@ -137,7 +139,6 @@ class _LandingState extends State<Landing> {
     );
   }
 }
-
 
 class NavDrawer extends StatelessWidget {
   const NavDrawer({super.key});
