@@ -1,3 +1,4 @@
+import 'package:bconnect/components/constrant.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -11,6 +12,10 @@ class Addpost extends StatefulWidget {
 class _AddpostState extends State<Addpost> {
   final TextEditingController _postTextController = TextEditingController();
   List<String> selectedImagePaths = [];
+  bool isPollActive = false;
+  final TextEditingController _pollQuestionController = TextEditingController();
+  final TextEditingController _pollOption1Controller = TextEditingController();
+  final TextEditingController _pollOption2Controller = TextEditingController();
 
   Future<void> _selectImages() async {
     List<XFile>? pickedImages;
@@ -33,12 +38,32 @@ class _AddpostState extends State<Addpost> {
     });
   }
 
+  void _togglePoll() {
+    setState(() {
+      isPollActive = !isPollActive;
+    });
+  }
+
+  void _createPoll() {
+    // Logic to create and submit the poll
+    final pollQuestion = _pollQuestionController.text;
+    final pollOption1 = _pollOption1Controller.text;
+    final pollOption2 = _pollOption2Controller.text;
+
+    // Implement your logic to submit the poll data
+
+    // For demonstration, we'll print the poll data
+    print('Poll Question: $pollQuestion');
+    print('Poll Option 1: $pollOption1');
+    print('Poll Option 2: $pollOption2');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Post"),
-        backgroundColor: Colors.blue, // Change to your desired color
+        backgroundColor: navbar, // Change to your desired color
         leading: IconButton(
           icon: const Icon(Icons.clear), // Change to a cross icon
           onPressed: () {
@@ -117,14 +142,67 @@ class _AddpostState extends State<Addpost> {
                 );
               },
             ),
+            const SizedBox(height: 16.0),
+            // Poll creation fields
+            if (isPollActive) ...[
+              const SizedBox(height: 16.0),
+              const Text(
+                "Poll Question:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextField(
+                controller: _pollQuestionController,
+                decoration: const InputDecoration(
+                  hintText: "Enter your poll question",
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              const Text(
+                "Poll Options:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextField(
+                controller: _pollOption1Controller,
+                decoration: const InputDecoration(
+                  hintText: "Option 1",
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              TextField(
+                controller: _pollOption2Controller,
+                decoration: const InputDecoration(
+                  hintText: "Option 2",
+                ),
+              ),
+            ],
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _selectImages();
-        },
-        child: const Icon(Icons.image),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: FloatingActionButton(
+              backgroundColor: navbar,
+              onPressed: () {
+                _selectImages();
+              },
+              child: const Icon(Icons.image),
+            ),
+          ),
+          const SizedBox(width: 16.0), // Add spacing between the buttons
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: FloatingActionButton(
+              backgroundColor: navbar,
+              onPressed: () {
+                _togglePoll();
+              },
+              child: const Icon(Icons.poll),
+            ),
+          ),
+        ],
       ),
     );
   }

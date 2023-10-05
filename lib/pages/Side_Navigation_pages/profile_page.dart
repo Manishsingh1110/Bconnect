@@ -220,6 +220,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     Widget followersSection() {
       return Container(
         width: double.infinity,
