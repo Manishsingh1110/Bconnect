@@ -1,3 +1,4 @@
+import 'package:bconnect/components/addpoll.dart';
 import 'package:bconnect/components/constrant.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,10 +13,6 @@ class Addpost extends StatefulWidget {
 class _AddpostState extends State<Addpost> {
   final TextEditingController _postTextController = TextEditingController();
   List<String> selectedImagePaths = [];
-  bool isPollActive = false;
-  final TextEditingController _pollQuestionController = TextEditingController();
-  final TextEditingController _pollOption1Controller = TextEditingController();
-  final TextEditingController _pollOption2Controller = TextEditingController();
 
   Future<void> _selectImages() async {
     List<XFile>? pickedImages;
@@ -36,26 +33,6 @@ class _AddpostState extends State<Addpost> {
     setState(() {
       selectedImagePaths.removeAt(index);
     });
-  }
-
-  void _togglePoll() {
-    setState(() {
-      isPollActive = !isPollActive;
-    });
-  }
-
-  void _createPoll() {
-    // Logic to create and submit the poll
-    final pollQuestion = _pollQuestionController.text;
-    final pollOption1 = _pollOption1Controller.text;
-    final pollOption2 = _pollOption2Controller.text;
-
-    // Implement your logic to submit the poll data
-
-    // For demonstration, we'll print the poll data
-    print('Poll Question: $pollQuestion');
-    print('Poll Option 1: $pollOption1');
-    print('Poll Option 2: $pollOption2');
   }
 
   @override
@@ -144,37 +121,6 @@ class _AddpostState extends State<Addpost> {
             ),
             const SizedBox(height: 16.0),
             // Poll creation fields
-            if (isPollActive) ...[
-              const SizedBox(height: 16.0),
-              const Text(
-                "Poll Question:",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextField(
-                controller: _pollQuestionController,
-                decoration: const InputDecoration(
-                  hintText: "Enter your poll question",
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              const Text(
-                "Poll Options:",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextField(
-                controller: _pollOption1Controller,
-                decoration: const InputDecoration(
-                  hintText: "Option 1",
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: _pollOption2Controller,
-                decoration: const InputDecoration(
-                  hintText: "Option 2",
-                ),
-              ),
-            ],
           ],
         ),
       ),
@@ -197,7 +143,8 @@ class _AddpostState extends State<Addpost> {
             child: FloatingActionButton(
               backgroundColor: navbar,
               onPressed: () {
-                _togglePoll();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const AddPoll()));
               },
               child: const Icon(Icons.poll),
             ),

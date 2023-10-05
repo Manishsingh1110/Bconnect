@@ -32,8 +32,10 @@ class _LandingState extends State<Landing> {
             icon: const Icon(Icons.chat),
             tooltip: 'Open Chat',
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Chats()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const UserListPage()));
             },
           ),
         ],
