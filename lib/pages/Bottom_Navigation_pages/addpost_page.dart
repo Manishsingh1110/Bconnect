@@ -2,6 +2,7 @@ import 'package:bconnect/components/addpoll.dart';
 import 'package:bconnect/components/constrant.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class Addpost extends StatefulWidget {
   const Addpost({Key? key}) : super(key: key);
@@ -101,8 +102,10 @@ class _AddpostState extends State<Addpost> {
                       onTap: () {
                         _showImageDialog(context, imagePath);
                       },
-                      child: Image.network(
-                        imagePath,
+                      child: Image.file(
+                        // Use Image.file instead of Image.network
+                        File(
+                            imagePath), // Assuming imagePath is a local file path
                         fit: BoxFit.cover,
                       ),
                     ),

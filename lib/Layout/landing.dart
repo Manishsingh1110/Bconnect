@@ -23,7 +23,10 @@ class _LandingState extends State<Landing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavDrawer(),
+      drawer: const NavDrawer(
+        userName: "Priyo Vommb",
+        userAvatarUrl: "/images/cool-profile-picture-natural-light.webp",
+      ),
       appBar: AppBar(
         backgroundColor: navbar,
         title: const Text("B-Connect"),
@@ -143,7 +146,13 @@ class _LandingState extends State<Landing> {
 }
 
 class NavDrawer extends StatelessWidget {
-  const NavDrawer({super.key});
+  final String userName; // Pass the user's name as a parameter
+  final String userAvatarUrl; // Pass the URL of the user's avatar image
+
+  const NavDrawer(
+      {Key? key, required this.userName, required this.userAvatarUrl})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -151,13 +160,50 @@ class NavDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: navbar,
-            ),
-            child: Text(
-              'Side menu',
-              style: TextStyle(color: Colors.white, fontSize: 25),
+          GestureDetector(
+            onTap: () {
+              // Navigate to the desired screen when the Drawer Header is tapped
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const Profile()), // Replace 'Profile' with the screen you want to navigate to
+              );
+            },
+            child: DrawerHeader(
+              decoration: const BoxDecoration(
+                color: navbar,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 15),
+                  CircleAvatar(
+                    radius: 35, // Reduce the size of the avatar
+                    backgroundImage: AssetImage(
+                        userAvatarUrl), // Use NetworkImage for online image
+                  ),
+                  const SizedBox(width: 15),
+                  Text(
+                    userName,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16), // Reduce the size of the name
+                  ),
+                  const SizedBox(
+                      height:
+                          15), // Add spacing between name and "View Profile"
+                  const Text(
+                    'View Profile',
+                    style: TextStyle(
+                      // Customize the color as desired
+                      color: Colors.white60,
+                      fontSize: 14, // Adjust the size of "View Profile" text
+                      decoration: TextDecoration.underline, // Add underline
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           ListTile(
