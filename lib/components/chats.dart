@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class Chats extends StatefulWidget {
   const Chats({Key? key, required this.user}) : super(key: key);
-  final User user;
+  final ChatUser user;
 
   @override
   // ignore: library_private_types_in_public_api

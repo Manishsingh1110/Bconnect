@@ -1,12 +1,5 @@
+import 'package:bconnect/models/notification.dart';
 import 'package:flutter/material.dart';
-
-class NotificationItem {
-  final String text;
-  final DateTime sentTime;
-  final String imageUrl;
-
-  NotificationItem(this.text, this.sentTime, this.imageUrl);
-}
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -19,9 +12,18 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications> {
   // Simulated list of notification items
   List<NotificationItem> notifications = [
-    NotificationItem('You have a new message', DateTime.now().subtract(const Duration(minutes: 2)), 'https://cdn-icons-png.flaticon.com/512/219/219969.png'),
-    NotificationItem('You have a new follower', DateTime.now().subtract(const Duration(hours: 1)), 'https://cdn-icons-png.flaticon.com/512/219/219969.png'),
-    NotificationItem('Your post was liked', DateTime.now().subtract(const Duration(hours: 2)), 'https://cdn-icons-png.flaticon.com/512/219/219969.png'),
+    NotificationItem(
+        'You have a new message',
+        DateTime.now().subtract(const Duration(minutes: 2)),
+        'https://cdn-icons-png.flaticon.com/512/219/219969.png'),
+    NotificationItem(
+        'You have a new follower',
+        DateTime.now().subtract(const Duration(hours: 1)),
+        'https://cdn-icons-png.flaticon.com/512/219/219969.png'),
+    NotificationItem(
+        'Your post was liked',
+        DateTime.now().subtract(const Duration(hours: 2)),
+        'https://cdn-icons-png.flaticon.com/512/219/219969.png'),
     // Add more notification items here
   ];
 
@@ -67,7 +69,8 @@ class NotificationCard extends StatelessWidget {
   final NotificationItem notification;
   final String timeElapsed;
 
-  const NotificationCard({super.key, required this.notification, required this.timeElapsed});
+  const NotificationCard(
+      {super.key, required this.notification, required this.timeElapsed});
 
   @override
   Widget build(BuildContext context) {

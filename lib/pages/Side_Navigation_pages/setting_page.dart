@@ -1,5 +1,6 @@
-import 'package:bconnect/components/constrant.dart';
 import 'package:flutter/material.dart';
+import 'package:bconnect/state/state.dart';
+import 'package:provider/provider.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -9,45 +10,52 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
- bool notificationsEnabled = true;
-  bool darkModeEnabled = false;
+  bool systemModeEnabled = true; // System mode switch
+  bool manualModeEnabled = false; // Manual mode switch
   String selectedLanguage = 'English';
 
   List<String> languages = ['English', 'Spanish', 'French', 'German'];
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    ThemeData theme = Theme.of(context);
+    Color primaryColor = theme.primaryColor;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:navbar,
+        backgroundColor: primaryColor,
       ),
-      body:  ListView(
+      body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
           ListTile(
-            title: const Text('Notifications'),
+            title: const Text('System Mode'),
             trailing: Switch(
-              value: notificationsEnabled,
+              value: themeProvider.useManualTheme,
               onChanged: (bool value) {
                 setState(() {
-                  notificationsEnabled = value;
+                  themeProvider.toggleTheme();
                 });
-                // Handle notification settings change
               },
             ),
           ),
-          ListTile(
-            title: const Text('Dark Mode'),
-            trailing: Switch(
-              value: darkModeEnabled,
-              onChanged: (bool value) {
-                setState(() {
-                  darkModeEnabled = value;
-                });
-                // Handle dark mode settings change
-              },
-            ),
-          ),
+
+          // ListTile(
+          //   title: const Text('Manual Mode'),
+          //   trailing: IgnorePointer(
+          //     ignoring: !themeProvider.useManualTheme,
+          //     child: Switch(
+          //       value: themeProvider.useManualTheme,
+          //       onChanged: (bool value) {
+          //         setState(() {
+          //           themeProvider.toggleManualTheme(value);
+          //           systemModeEnabled = !value;
+          //         });
+          //       },
+          //     ),
+          //   ),
+          // ),
+
           ListTile(
             title: const Text('Language'),
             trailing: DropdownButton<String>(
@@ -56,7 +64,7 @@ class _SettingState extends State<Setting> {
                 setState(() {
                   selectedLanguage = value!;
                 });
-                // Handle language change
+                // Handle language change, e.g., using SharedPreferences.
               },
               items: languages.map((String language) {
                 return DropdownMenuItem<String>(
@@ -90,5 +98,4 @@ class _SettingState extends State<Setting> {
       ),
     );
   }
-    
-  }
+}

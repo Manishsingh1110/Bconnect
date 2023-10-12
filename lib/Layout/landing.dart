@@ -9,6 +9,7 @@ import 'package:bconnect/pages/Side_Navigation_pages/profile_page.dart';
 import 'package:bconnect/pages/Bottom_Navigation_pages/resources_page.dart';
 import 'package:bconnect/pages/Bottom_Navigation_pages/search_page.dart';
 import 'package:bconnect/pages/Side_Navigation_pages/setting_page.dart';
+import 'package:bconnect/state/state.dart';
 import 'package:flutter/material.dart';
 
 class Landing extends StatefulWidget {
@@ -20,15 +21,38 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing> {
   int currentPageIndex = 0;
+  Map<String, dynamic>? storedUser;
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    final userLogin = Userlogin();
+    final user = await userLogin.retrieveUser();
+    if (user != null) {
+      setState(() {
+        storedUser = user;
+      });
+    } else {
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const Login()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    Color primaryColor = theme.primaryColor;
     return Scaffold(
-      drawer: const NavDrawer(
-        userName: "Priyo Vommb",
-        userAvatarUrl: "/images/cool-profile-picture-natural-light.webp",
+      drawer: NavDrawer(
+        userName: storedUser?['name'] ?? 'No name available',
+        userAvatarUrl: storedUser?['imageurl'] ?? '/',
       ),
       appBar: AppBar(
-        backgroundColor: navbar,
+        backgroundColor: primaryColor,
         title: const Text("B-Connect"),
         actions: [
           IconButton(

@@ -1,22 +1,9 @@
 import 'package:bconnect/components/addnewgroup.dart';
 import 'package:bconnect/components/constrant.dart';
+import 'package:bconnect/models/group.dart';
+import 'package:bconnect/state/state.dart';
 import 'package:flutter/material.dart';
-
-class Group {
-  final String name;
-  final String description;
-  final String imageUrl;
-  final int numberOfPeople;
-  final DateTime createdAt;
-
-  Group({
-    required this.name,
-    required this.description,
-    required this.imageUrl,
-    required this.numberOfPeople,
-    required this.createdAt,
-  });
-}
+import 'package:provider/provider.dart';
 
 class GroupPage extends StatefulWidget {
   const GroupPage({super.key});
@@ -27,23 +14,7 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends State<GroupPage> {
-  List<Group> groups = [
-    Group(
-      name: 'Group 1',
-      description: 'Description for Group 1',
-      imageUrl: 'assets/group1.png',
-      numberOfPeople: 10,
-      createdAt: DateTime(2023, 9, 1),
-    ),
-    Group(
-      name: 'Group 2',
-      description: 'Description for Group 2',
-      imageUrl: 'assets/group2.png',
-      numberOfPeople: 5,
-      createdAt: DateTime(2023, 8, 15),
-    ),
-    // Add more groups here
-  ];
+  List<Group> groups = [];
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +23,21 @@ class _GroupPageState extends State<GroupPage> {
         backgroundColor: navbar,
         title: const Text('Groups'),
       ),
-      body: ListView.builder(
-        itemCount: groups.length,
-        itemBuilder: (BuildContext context, int index) {
-          final group = groups[index];
-          return buildGroupCard(group);
-        },
+      body: Container(
+        alignment: Alignment.center,
+        child: Consumer<GroupListModel>(
+          // ignore: non_constant_identifier_names, avoid_types_as_parameter_names
+          builder: (context, GroupListModel, child) {
+            final groups = GroupListModel.groups;
+            return ListView.builder(
+              itemCount: groups.length,
+              itemBuilder: (context, index) {
+                final group = groups[index];
+                return buildGroupCard(group);
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: kButtonColor,

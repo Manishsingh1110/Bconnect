@@ -1,3 +1,9 @@
+import 'package:bconnect/components/followercard.dart';
+import 'package:bconnect/components/recommendedgroupcard.dart';
+import 'package:bconnect/components/recommendedusercard.dart';
+import 'package:bconnect/models/follower.dart';
+import 'package:bconnect/models/recommendedgroup.dart';
+import 'package:bconnect/models/recommendeduser.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -7,48 +13,6 @@ class Search extends StatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
   _SearchState createState() => _SearchState();
-}
-
-class Follower {
-  final String name;
-  final String profilePicture;
-  final String description;
-  final int totalFollowers;
-
-  Follower({
-    required this.name,
-    required this.profilePicture,
-    required this.description,
-    required this.totalFollowers,
-  });
-}
-
-class RecommendedUser {
-  final String name;
-  final String profilePicture;
-  final String description;
-  final int totalFollowers;
-
-  RecommendedUser({
-    required this.name,
-    required this.profilePicture,
-    required this.description,
-    required this.totalFollowers,
-  });
-}
-
-class RecommendedGroup {
-  final String name;
-  final String groupImage;
-  final String description;
-  final int totalMembers;
-
-  RecommendedGroup({
-    required this.name,
-    required this.groupImage,
-    required this.description,
-    required this.totalMembers,
-  });
 }
 
 class _SearchState extends State<Search> {
@@ -380,155 +344,6 @@ class _SearchState extends State<Search> {
             buildRecommendedUsers(),
             const SizedBox(height: 15),
             buildRecommendedGroups(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class FollowerCard extends StatelessWidget {
-  final Follower follower;
-
-  const FollowerCard({Key? key, required this.follower}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2, // Add elevation for a card-like appearance
-      // Set a fixed height for the card (adjust as needed)
-      // Add padding for spacing
-      child: Center(
-        // Center the content vertically
-        child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Align everything in the middle
-          children: [
-            CircleAvatar(
-              radius: 32, // Adjust the radius as needed
-              backgroundImage: AssetImage(follower.profilePicture),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              follower.name,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              follower.description,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              "${follower.totalFollowers} Followers",
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () {
-                // Handle follow button tap logic here
-                // You can toggle the follow status and update the UI accordingly
-              },
-              child: const Text("Following"),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class RecommendedUserCard extends StatelessWidget {
-  final RecommendedUser user;
-
-  const RecommendedUserCard({Key? key, required this.user}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2, // Add elevation for a card-like appearance
-      child: Center(
-        // Center the content vertically
-        child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Align everything in the middle
-          children: [
-            CircleAvatar(
-              radius: 32,
-              backgroundImage: AssetImage(user.profilePicture),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              user.name,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              user.description,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              "${user.totalFollowers} Followers",
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text("Follow"),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class RecommendedGroupCard extends StatelessWidget {
-  final RecommendedGroup group;
-
-  const RecommendedGroupCard({Key? key, required this.group}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2, // Add elevation for a card-like appearance
-      child: Center(
-        // Center the content vertically
-        child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Align everything in the middle
-          children: [
-            CircleAvatar(
-              radius: 32,
-              backgroundImage: AssetImage(group.groupImage),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              group.name,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              group.description,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              "${group.totalMembers} Members",
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () {
-                // Handle follow button tap logic here
-                // You can toggle the follow status and update the UI accordingly
-              },
-              child: const Text("Follow"),
-            ),
           ],
         ),
       ),

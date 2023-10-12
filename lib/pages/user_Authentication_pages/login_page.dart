@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bconnect/Layout/landing.dart';
 import 'package:bconnect/pages/user_Authentication_pages/signup_page.dart';
 import "package:flutter/material.dart";
@@ -5,6 +7,7 @@ import 'package:bconnect/components/constrant.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -18,8 +21,13 @@ class _Login extends State<Login> {
   var email = TextEditingController();
   var password = TextEditingController();
 
+  final Map<String, dynamic> user = {
+    'name': 'Priyo Vommb',
+    'imageurl': 'assets/images/cool-profile-picture-natural-light.webp'
+  };
   @override
   Widget build(BuildContext context) {
+    final String userJson = jsonEncode(user);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: Form(
@@ -137,11 +145,14 @@ class _Login extends State<Login> {
               ),
               CupertinoButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () {
+                  onPressed: () async {
                     final form = formkey.currentState!;
                     if (form.validate()) {
                       if (email.text == "Manish@gmail.com" ||
                           password.text == "123456") {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setString('user', userJson);
+                        // ignore: use_build_context_synchronously
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

@@ -1,8 +1,12 @@
 import 'package:bconnect/components/addpoll.dart';
 import 'package:bconnect/components/constrant.dart';
+import 'package:bconnect/models/postcard.dart';
+import 'package:bconnect/state/state.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+
+import 'package:provider/provider.dart';
 
 class Addpost extends StatefulWidget {
   const Addpost({Key? key}) : super(key: key);
@@ -21,8 +25,9 @@ class _AddpostState extends State<Addpost> {
     try {
       final picker = ImagePicker();
       pickedImages = await picker.pickMultiImage();
-      // ignore: empty_catches
-    } on Exception {}
+    } catch (e) {
+      // Handle any errors that may occur when picking images
+    }
 
     setState(() {
       selectedImagePaths =
@@ -43,16 +48,17 @@ class _AddpostState extends State<Addpost> {
         title: const Text("Add Post"),
         backgroundColor: navbar, // Change to your desired color
         leading: IconButton(
-          icon: const Icon(Icons.clear), // Change to a cross icon
+          icon: const Icon(Icons.clear),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.check), // Icon for adding the post
+            icon: const Icon(Icons.check),
             onPressed: () {
-              // Implement your logic to add the post here
+              // Handle the action when the user taps the checkmark icon to add a post
+              _addPost();
             },
           ),
         ],
@@ -65,35 +71,30 @@ class _AddpostState extends State<Addpost> {
             const SizedBox(height: 16.0),
             Container(
               decoration: BoxDecoration(
-                border: Border.all(
-                    color:
-                        Colors.transparent), // Set border color to transparent
-                borderRadius:
-                    BorderRadius.circular(8.0), // Add border radius if needed
+                border: Border.all(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(8.0),
               ),
               child: TextField(
                 controller: _postTextController,
                 decoration: const InputDecoration(
                   hintText: "What do you want to talk about?",
-                  contentPadding:
-                      EdgeInsets.all(16.0), // Adjust padding as needed
-                  border: InputBorder.none, // Remove border
+                  contentPadding: EdgeInsets.all(16.0),
+                  border: InputBorder.none,
                 ),
-                maxLines: null, // Allows dynamic height
+                maxLines: null,
               ),
             ),
             const SizedBox(height: 16.0),
             // Display selected images in a grid
             GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, // Number of columns in the grid
-                crossAxisSpacing: 8.0, // Spacing between columns
-                mainAxisSpacing: 8.0, // Spacing between rows
+                crossAxisCount: 3,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
               ),
               itemCount: selectedImagePaths.length,
-              shrinkWrap: true, // Wrap the grid in a SingleChildScrollView
-              physics:
-                  const NeverScrollableScrollPhysics(), // Disable scrolling in the grid
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 final imagePath = selectedImagePaths[index];
                 return Stack(
@@ -103,9 +104,7 @@ class _AddpostState extends State<Addpost> {
                         _showImageDialog(context, imagePath);
                       },
                       child: Image.file(
-                        // Use Image.file instead of Image.network
-                        File(
-                            imagePath), // Assuming imagePath is a local file path
+                        File(imagePath),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -123,7 +122,7 @@ class _AddpostState extends State<Addpost> {
               },
             ),
             const SizedBox(height: 16.0),
-            // Poll creation fields
+            // Other components or widgets can be added here for poll creation, etc.
           ],
         ),
       ),
@@ -140,7 +139,7 @@ class _AddpostState extends State<Addpost> {
               child: const Icon(Icons.image),
             ),
           ),
-          const SizedBox(width: 16.0), // Add spacing between the buttons
+          const SizedBox(width: 16.0),
           Align(
             alignment: Alignment.bottomCenter,
             child: FloatingActionButton(
@@ -157,7 +156,6 @@ class _AddpostState extends State<Addpost> {
     );
   }
 
-  // Function to show the image in a dialog
   void _showImageDialog(BuildContext context, String imagePath) {
     showDialog(
       context: context,
@@ -165,15 +163,35 @@ class _AddpostState extends State<Addpost> {
         return Dialog(
           child: GestureDetector(
             onTap: () {
-              Navigator.of(context).pop(); // Close the dialog when tapped
+              Navigator.of(context).pop();
             },
-            child: Image.network(
-              imagePath,
+            child: Image.file(
+              File(imagePath),
               fit: BoxFit.cover,
             ),
           ),
         );
       },
     );
+  }
+
+  void _addPost() {
+    // Handle the logic for adding a post, including text and images
+    // Once the post is added, you can notify listeners or perform other actions
+    // For example:
+    final post = Post(
+      userName: 'John Doe',
+      userImage: "assets/images/cool-profile-picture-natural-light.webp",
+      timeAgo: '2 hours ago',
+      likeCount: 45,
+      commentCount: 12,
+      postText:
+          'This is a sample social media post text with a single image. You can replace it with your own content.',
+      postImages: ['assets/images/image_2.jpg'],
+    );
+    PostListModel postListModel =
+        Provider.of<PostListModel>(context, listen: false);
+    postListModel.addPost(post);
+    Navigator.of(context).pop();
   }
 }
