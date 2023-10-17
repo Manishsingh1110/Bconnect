@@ -209,10 +209,19 @@ class Userlogin extends ChangeNotifier {
   // Method to retrieve user data from shared preferences
   Future<Map<String, dynamic>?> retrieveUser() async {
     final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString('user');
+    final storedCustomerData = prefs.getString('customerData');
+    if (storedCustomerData != null) {
+      return jsonDecode(storedCustomerData);
+    } else {
+      return null; // Handle the case where the data is not found
+    }
+  }
 
-    if (userJson != null) {
-      return jsonDecode(userJson);
+  Future<Map<String, dynamic>?> retrievejwt() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedJwtToken = prefs.getString('jwtToken');
+    if (storedJwtToken != null) {
+      return jsonDecode(storedJwtToken);
     } else {
       return null; // Handle the case where the data is not found
     }

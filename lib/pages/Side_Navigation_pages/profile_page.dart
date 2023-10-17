@@ -139,6 +139,21 @@ class _ProfileState extends State<Profile> {
     ThemeData theme = Theme.of(context);
     Color primaryColor = theme.primaryColor;
     Color hintColor = theme.hintColor;
+    final userAvatarUrl = storedUser?['avatar'] ?? '/';
+    final String url =
+        "https://bconnect-backend-main.onrender.com/$userAvatarUrl";
+
+    String displayName;
+
+    if (storedUser?['profileType'] == 'Company') {
+      displayName = storedUser?['companyname'] ?? 'No name available';
+    } else {
+      if (storedUser?['firstname'] != null && storedUser?['lastname'] != null) {
+        displayName = '${storedUser?['firstname']} ${storedUser?['lastname']}';
+      } else {
+        displayName = 'No name available';
+      }
+    }
 
     Widget followersSection() {
       return Container(
@@ -343,17 +358,18 @@ class _ProfileState extends State<Profile> {
                               Align(
                                 alignment: Alignment.topLeft,
                                 child: Text(
-                                  storedUser?['name'] ?? 'No name available',
+                                  displayName,
                                   textAlign: TextAlign.start,
                                 ),
                               ),
                               const SizedBox(height: 5),
-                              const Padding(
-                                padding: EdgeInsets.only(right: 15),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 15),
                                 child: Align(
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    "The debugEmulateFlutterTesterEnvironment getter is deprecated and will be removed in a future release. Please use debug Emulate Flutter Tester Environment` from `dart:ui_web` instead.",
+                                    storedUser?['description'] ??
+                                        'No name available',
                                     softWrap: true,
                                   ),
                                 ),
@@ -373,8 +389,8 @@ class _ProfileState extends State<Profile> {
                     children: [
                       CircleAvatar(
                         radius: 60,
-                        backgroundImage: AssetImage(
-                          storedUser?['imageurl'] ?? '/',
+                        backgroundImage: NetworkImage(
+                          url,
                         ),
                       ),
                     ],
@@ -410,11 +426,11 @@ class _ProfileState extends State<Profile> {
                           Text.rich(
                             TextSpan(
                               children: [
-                                const TextSpan(
+                                TextSpan(
                                   // Show a limited portion of text when not expanded.
-                                  text:
-                                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
-                                  style: TextStyle(),
+                                  text: storedUser?['aboutus'] ??
+                                      'No about data available',
+                                  style: const TextStyle(),
                                 ),
                                 TextSpan(
                                   text: "Read More",
@@ -440,11 +456,11 @@ class _ProfileState extends State<Profile> {
                           Text.rich(
                             TextSpan(
                               children: [
-                                const TextSpan(
+                                TextSpan(
                                   // Show a limited portion of text when not expanded.
-                                  text:
-                                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                                  style: TextStyle(),
+                                  text: storedUser?['aboutus'] ??
+                                      'No about data available',
+                                  style: const TextStyle(),
                                 ),
                                 TextSpan(
                                   text: "Read Less",

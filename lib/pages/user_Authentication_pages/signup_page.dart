@@ -33,6 +33,9 @@ class _SignupPageState extends State<SignupPage> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   late TextEditingController productController;
+  late TextEditingController aboutUsController;
+  List<String> profileTypes = ['user', 'company'];
+  String selectedProfileType = 'user';
 
   @override
   void initState() {
@@ -46,6 +49,7 @@ class _SignupPageState extends State<SignupPage> {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     productController = TextEditingController();
+    aboutUsController = TextEditingController();
   }
 
   Future<void> _pickImage() async {
@@ -71,6 +75,7 @@ class _SignupPageState extends State<SignupPage> {
     emailController.dispose();
     passwordController.dispose();
     productController.dispose();
+    aboutUsController.dispose();
     super.dispose();
   }
 
@@ -295,6 +300,59 @@ class _SignupPageState extends State<SignupPage> {
             },
           ),
           SizedBox(height: size.height * 0.02),
+          DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              filled: true,
+              hintStyle: const TextStyle(color: Colors.grey),
+              fillColor: kWhiteColor,
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(40),
+              ),
+            ),
+            value: selectedProfileType,
+            onChanged: (String? newValue) {
+              // Specify the type as 'String?' or 'String'
+              if (newValue != null) {
+                // Check for null value
+                setState(() {
+                  selectedProfileType = newValue;
+                });
+              }
+            },
+            items: profileTypes.map((type) {
+              return DropdownMenuItem<String>(
+                value: type,
+                child: Text(type),
+              );
+            }).toList(),
+          ),
+
+          SizedBox(height: size.height * 0.02),
+
+          // About Us Text Field
+          TextFormField(
+            style: const TextStyle(color: kInputColor),
+            maxLines: 4, // Multiline text box
+            decoration: InputDecoration(
+              filled: true,
+              hintStyle: const TextStyle(color: Colors.grey),
+              hintText: "About Us",
+              fillColor: kWhiteColor,
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(40),
+              ),
+            ),
+            controller: aboutUsController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please provide information about your company or yourself.';
+              }
+              return null;
+            },
+          ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -509,6 +567,8 @@ class _SignupPageState extends State<SignupPage> {
       request.fields['firstname'] = firstNameController.text;
       request.fields['lastname'] = lastNameController.text;
       request.fields['description'] = companyDescriptionController.text;
+      request.fields['aboutus'] = aboutUsController.text;
+      request.fields['profileType'] = selectedProfileType;
 
       // Attach the image file (if selected)
       if (selectedImagePath != null) {

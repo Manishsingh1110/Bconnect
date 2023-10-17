@@ -48,8 +48,8 @@ class _LandingState extends State<Landing> {
     Color primaryColor = theme.primaryColor;
     return Scaffold(
       drawer: NavDrawer(
-        userName: storedUser?['name'] ?? 'No name available',
-        userAvatarUrl: storedUser?['imageurl'] ?? '/',
+        userName: storedUser?['username'] ?? 'No name available',
+        userAvatarUrl: storedUser?['avatar'] ?? '/',
       ),
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -173,13 +173,14 @@ class _LandingState extends State<Landing> {
 class NavDrawer extends StatelessWidget {
   final String userName;
   final String userAvatarUrl;
-
   const NavDrawer(
       {Key? key, required this.userName, required this.userAvatarUrl})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final String url =
+        "https://bconnect-backend-main.onrender.com/$userAvatarUrl";
     ThemeData theme = Theme.of(context);
     Color primaryColor = theme.primaryColor;
     return Drawer(
@@ -208,8 +209,8 @@ class NavDrawer extends StatelessWidget {
                     const SizedBox(height: 15),
                     CircleAvatar(
                       radius: 35, // Reduce the size of the avatar
-                      backgroundImage: AssetImage(
-                          userAvatarUrl), // Use NetworkImage for online image
+                      backgroundImage: NetworkImage(
+                          url), // Use NetworkImage for online image
                     ),
                     const SizedBox(width: 15),
                     Text(
@@ -243,24 +244,30 @@ class NavDrawer extends StatelessWidget {
                   leading: const Icon(Icons.verified_user),
                   title: const Text('Profile'),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const Profile()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Profile()));
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
                   title: const Text('Settings'),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const Setting()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Setting()));
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.group),
                   title: const Text('Group'),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const GroupPage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const GroupPage()));
                   },
                 ),
               ],
@@ -270,8 +277,8 @@ class NavDrawer extends StatelessWidget {
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Logout'),
             onTap: () {
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => const Login()));
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const Login()));
             },
           ),
         ],
