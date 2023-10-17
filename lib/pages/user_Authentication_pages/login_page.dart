@@ -83,9 +83,6 @@ class _Login extends State<Login> {
                 keyboardType: TextInputType.emailAddress,
                 style: const TextStyle(color: kInputColor),
                 decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide:
@@ -96,6 +93,7 @@ class _Login extends State<Login> {
                     contentPadding: const EdgeInsets.symmetric(vertical: 20),
                     filled: true,
                     hintText: "E-mail",
+                    hintStyle: const TextStyle(color: Colors.grey),
                     prefixIcon: IconButton(
                       onPressed: () {},
                       icon: SvgPicture.asset(userIcon),
@@ -121,9 +119,6 @@ class _Login extends State<Login> {
                 keyboardType: TextInputType.text,
                 style: const TextStyle(color: kInputColor),
                 decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide:
@@ -134,6 +129,7 @@ class _Login extends State<Login> {
                     contentPadding: const EdgeInsets.symmetric(vertical: 20),
                     filled: true,
                     hintText: "Password",
+                    hintStyle: const TextStyle(color: Colors.grey),
                     prefixIcon: IconButton(
                       onPressed: () {},
                       icon: SvgPicture.asset(keyIcon),
@@ -148,7 +144,7 @@ class _Login extends State<Login> {
                   onPressed: () async {
                     final form = formkey.currentState!;
                     if (form.validate()) {
-                      if (email.text == "Manish@gmail.com" ||
+                      if (email.text == "Test@gmail.com" ||
                           password.text == "123456") {
                         final prefs = await SharedPreferences.getInstance();
                         await prefs.setString('user', userJson);

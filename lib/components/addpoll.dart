@@ -1,4 +1,3 @@
-import 'package:bconnect/components/constrant.dart';
 import 'package:flutter/material.dart';
 
 class AddPoll extends StatefulWidget {
@@ -29,10 +28,12 @@ class _AddPollState extends State<AddPoll> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    Color primaryColor = theme.primaryColor;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Poll"),
-        backgroundColor: navbar, // Change to your desired color
+        backgroundColor: primaryColor, // Change to your desired color
         // Set your desired color here
         leading: IconButton(
           icon: const Icon(Icons.arrow_back), // Change to a cross icon
@@ -126,7 +127,8 @@ class _AddPollState extends State<AddPoll> {
                 });
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: navbar, // Change to your desired button color
+                backgroundColor:
+                    primaryColor, // Change to your desired button color
               ),
               child: const Text("Add Option"),
             ),

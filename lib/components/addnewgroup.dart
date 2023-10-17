@@ -80,9 +80,11 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    Color primaryColor = theme.primaryColor;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple, // Set the background color to purple
+        backgroundColor: primaryColor, // Set the background color to purple
         leading: IconButton(
           icon: const Icon(Icons.close,
               color: Colors.white), // Set the icon color to white

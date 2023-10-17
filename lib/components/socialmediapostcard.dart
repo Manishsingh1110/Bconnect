@@ -429,6 +429,8 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
       // Handle the case when there are no images
       postContent = const SizedBox.shrink();
     }
+    ThemeData theme = Theme.of(context);
+    Color hintColor = theme.hintColor;
 
     return Card(
       margin: const EdgeInsets.all(8.0),
@@ -444,10 +446,36 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
               ),
               title: Text(widget.post.userName),
               subtitle: Text(widget.post.timeAgo),
+              trailing: PopupMenuButton<String>(
+                onSelected: (value) {
+                  // Handle menu item selection here
+                  if (value == 'edit') {
+                    // Handle edit action
+                  } else if (value == 'delete') {
+                    // Handle delete action
+                  }
+                },
+                itemBuilder: (BuildContext context) {
+                  return <PopupMenuEntry<String>>[
+                    const PopupMenuItem<String>(
+                      value: 'edit',
+                      child: Text('Save'),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'delete',
+                      child: Text('Not Interested'),
+                    ),
+                  ];
+                },
+              ),
+            ),
+            const Divider(
+              height: 1,
+              color: Colors.grey,
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Text(
                 widget.post.postText,
                 style: const TextStyle(fontSize: 16.0),
@@ -473,9 +501,10 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                     const SizedBox(width: 4),
                     Text(
                       "${widget.post.likeCount} Likes",
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: TextStyle(
+                          color: (hintColor == Colors.black)
+                              ? Colors.white
+                              : Colors.black),
                     ),
                   ],
                 ),
@@ -488,12 +517,11 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       },
                     ),
                     const SizedBox(width: 4),
-                    Text(
-                      "${widget.post.likeCount} Comments",
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
+                    Text("${widget.post.likeCount} Comments",
+                        style: TextStyle(
+                            color: (hintColor == Colors.black)
+                                ? Colors.white
+                                : Colors.black)),
                   ],
                 ),
                 IconButton(

@@ -1,5 +1,4 @@
 import 'package:bconnect/components/chats.dart';
-import 'package:bconnect/components/constrant.dart';
 import 'package:bconnect/models/user.dart'; // Assuming User is defined in a separate user.dart file
 import 'package:bconnect/state/state.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +17,11 @@ class _UserListPageState extends State<UserListPage> {
   Widget build(BuildContext context) {
     // Get the chat users from the ChatUserModel using Provider
     final chatUserModel = Provider.of<ChatUserModel>(context);
-
+    ThemeData theme = Theme.of(context);
+    Color primaryColor = theme.primaryColor;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: navbar,
+        backgroundColor: primaryColor,
         title: const Text('Chats'),
       ),
       body: ListView.builder(
@@ -42,6 +42,8 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    Color primaryColor = theme.primaryColor;
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -54,7 +56,7 @@ class CustomListTile extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           // Add user's avatar here
-          backgroundColor: navbar, // Customize the background color
+          backgroundColor: primaryColor, // Customize the background color
           child: Text(
             user.name[0].toUpperCase(),
             style: const TextStyle(
@@ -65,7 +67,7 @@ class CustomListTile extends StatelessWidget {
         ),
         title: Text(user.name),
         subtitle: Text(user.lastMessage), // Use the actual last message
-        trailing: Text(user.lastMessageDate.toString()), // Use the actual date
+        trailing: const Text("Today"), // Use the actual date
       ),
     );
   }

@@ -131,14 +131,14 @@ class GroupListModel extends ChangeNotifier {
       Group(
         name: 'Group 1',
         description: 'Description for Group 1',
-        imageUrl: 'assets/group1.png',
+        imageUrl: 'assets/images/group.jpg',
         numberOfPeople: 10,
         createdAt: DateTime(2023, 9, 1),
       ),
       Group(
         name: 'Group 2',
         description: 'Description for Group 2',
-        imageUrl: 'assets/group2.png',
+        imageUrl: 'assets/images/group.jpg',
         numberOfPeople: 5,
         createdAt: DateTime(2023, 8, 15),
       ),

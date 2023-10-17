@@ -1,9 +1,15 @@
+// ignore_for_file: avoid_print
+
 import 'package:bconnect/pages/user_Authentication_pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bconnect/components/constrant.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -16,18 +22,17 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   int _currentStep = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? selectedImagePath;
+  List<String> userProducts = [];
   late TextEditingController firstNameController;
   late TextEditingController lastNameController;
   late TextEditingController usernameController;
   late TextEditingController companyNameController;
   late TextEditingController companyScaleController;
   late TextEditingController companyDescriptionController;
-  late TextEditingController product1Controller;
-  late TextEditingController product2Controller;
-  late TextEditingController product3Controller;
   late TextEditingController emailController;
   late TextEditingController passwordController;
-  late TextEditingController confirmPasswordController;
+  late TextEditingController productController;
 
   @override
   void initState() {
@@ -38,12 +43,20 @@ class _SignupPageState extends State<SignupPage> {
     companyNameController = TextEditingController();
     companyScaleController = TextEditingController();
     companyDescriptionController = TextEditingController();
-    product1Controller = TextEditingController();
-    product2Controller = TextEditingController();
-    product3Controller = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
-    confirmPasswordController = TextEditingController();
+    productController = TextEditingController();
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      setState(() {
+        selectedImagePath = pickedImage.path;
+      });
+    }
   }
 
   @override
@@ -55,12 +68,9 @@ class _SignupPageState extends State<SignupPage> {
     companyNameController.dispose();
     companyScaleController.dispose();
     companyDescriptionController.dispose();
-    product1Controller.dispose();
-    product2Controller.dispose();
-    product3Controller.dispose();
     emailController.dispose();
     passwordController.dispose();
-    confirmPasswordController.dispose();
+    productController.dispose();
     super.dispose();
   }
 
@@ -87,65 +97,93 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        body: Container(
-            height: double.maxFinite,
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [g1, g2])),
-            child: SingleChildScrollView(
-                padding: EdgeInsets.all(size.height * 0.03),
-                child: OverflowBar(
-                    overflowSpacing: size.height * 0.02,
-                    overflowAlignment: OverflowBarAlignment.center,
-                    children: [
-                      SizedBox(height: size.height * 0.008),
-                      Image.asset(image1),
-                      const Text(
-                        "Please , Sign In.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 34,
-                          color: kWhiteColor,
-                        ),
-                      ),
-                      Form(
-                        key: _formKey,
-                        child: _buildStep(),
-                      ),
-                      SvgPicture.asset("assets/icon/deisgn.svg"),
-                      CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Login()));
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: double.infinity,
-                            height: size.height * 0.07,
-                            decoration: BoxDecoration(
-                                boxShadow: const [
-                                  BoxShadow(
-                                      blurRadius: 45,
-                                      spreadRadius: 0,
-                                      color: Color.fromRGBO(120, 37, 137, 0.25),
-                                      offset: Offset(0, 25))
-                                ],
-                                borderRadius: BorderRadius.circular(40),
-                                color:const Color.fromRGBO(225, 225, 225, 0.25)),
-                            child: const Text(
-                              "Login",
-                              style: TextStyle(
-                                  color: kWhiteColor,
-                                  fontWeight: FontWeight.w600),
+        body: Center(
+            child: Container(
+                height: double.maxFinite,
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [g1, g2])),
+                child: SingleChildScrollView(
+                    padding: EdgeInsets.all(size.height * 0.03),
+                    child: Column(
+                        mainAxisAlignment:
+                            MainAxisAlignment.center, // Center vertically
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: size.height * 0.05),
+                          GestureDetector(
+                            onTap: _pickImage,
+                            child: selectedImagePath == null
+                                ? CircleAvatar(
+                                    radius: 50,
+                                    backgroundColor: Colors.grey[200],
+                                    child: const Icon(
+                                      Icons.camera_alt,
+                                      size: 40,
+                                      color: Colors.grey,
+                                    ),
+                                  )
+                                : ClipOval(
+                                    child: Image.file(
+                                      File(selectedImagePath!),
+                                      width: 150,
+                                      height: 150,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                          ),
+                          SizedBox(height: size.height * 0.02),
+                          const Text(
+                            "Please , Sign In.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 34,
+                              color: kWhiteColor,
                             ),
-                          )),
-                    ]))));
+                          ),
+                          SizedBox(height: size.height * 0.02),
+                          Form(
+                            key: _formKey,
+                            child: _buildStep(),
+                          ),
+                          SizedBox(height: size.height * 0.02),
+                          SvgPicture.asset("assets/icon/deisgn.svg"),
+                          SizedBox(height: size.height * 0.02),
+                          CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Login()));
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: double.infinity,
+                                height: size.height * 0.07,
+                                decoration: BoxDecoration(
+                                    boxShadow: const [
+                                      BoxShadow(
+                                          blurRadius: 45,
+                                          spreadRadius: 0,
+                                          color: Color.fromRGBO(
+                                              120, 37, 137, 0.25),
+                                          offset: Offset(0, 25))
+                                    ],
+                                    borderRadius: BorderRadius.circular(40),
+                                    color: const Color.fromRGBO(
+                                        225, 225, 225, 0.25)),
+                                child: const Text(
+                                  "Login",
+                                  style: TextStyle(
+                                      color: kWhiteColor,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              )),
+                        ])))));
   }
 
   Widget _buildStep() {
@@ -164,473 +202,553 @@ class _SignupPageState extends State<SignupPage> {
   Widget _buildPersonalInfoCard() {
     Size size = MediaQuery.of(context).size;
     return Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              style: const TextStyle(color: kInputColor),
-              decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.2),
-                  ),
-                  errorStyle:
-                      const TextStyle(fontSize: 16.0, color: Colors.white),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                  filled: true,
-                  hintText: "First Name",
-                  prefixIcon: IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(userIcon),
-                  ),
-                  fillColor: kWhiteColor,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(40))),
-              controller: firstNameController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your first name.';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: size.height * 0.008),
-            TextFormField(
-              style: const TextStyle(color: kInputColor),
-              decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.2),
-                  ),
-                  errorStyle:
-                      const TextStyle(fontSize: 16.0, color: Colors.white),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                  filled: true,
-                  hintText: "Last Name",
-                  prefixIcon: IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(userIcon),
-                  ),
-                  fillColor: kWhiteColor,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(40))),
-              controller: lastNameController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your last name.';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: size.height * 0.008),
-            TextFormField(
-              style: const TextStyle(color: kInputColor),
-              decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.2),
-                  ),
-                  errorStyle:
-                      const TextStyle(fontSize: 16.0, color: Colors.white),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                  filled: true,
-                  hintText: "Username",
-                  prefixIcon: IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(userIcon),
-                  ),
-                  fillColor: kWhiteColor,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(40))),
-              controller: usernameController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a username.';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: size.height * 0.008),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  width: 250,
-                  child: CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed:_nextStep,
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        height: size.height * 0.07,
-                        decoration: BoxDecoration(
-                            boxShadow: const [
-                              BoxShadow(
-                                  blurRadius: 45,
-                                  spreadRadius: 0,
-                                  color: Color.fromRGBO(120, 37, 137, 0.25),
-                                  offset: Offset(0, 25))
-                            ],
-                            borderRadius: BorderRadius.circular(40),
-                            color: kButtonColor),
-                        child: const Text(
-                          "Next",
-                          style: TextStyle(
-                              color: kWhiteColor, fontWeight: FontWeight.w600),
-                        ),
-                      )),
-                )
-              ],
-            ),
-          ],
-        ),
-      );
+      padding: const EdgeInsets.all(2.0),
+      child: Column(
+        children: <Widget>[
+          TextFormField(
+            style: const TextStyle(color: kInputColor),
+            decoration: InputDecoration(
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: const BorderSide(color: Colors.red, width: 1.2),
+                ),
+                errorStyle:
+                    const TextStyle(fontSize: 16.0, color: Colors.white),
+                contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                filled: true,
+                hintStyle: const TextStyle(color: Colors.grey),
+                hintText: "First Name",
+                prefixIcon: IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(userIcon),
+                ),
+                fillColor: kWhiteColor,
+                border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(40))),
+            controller: firstNameController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your first name.';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: size.height * 0.02),
+          TextFormField(
+            style: const TextStyle(color: kInputColor),
+            decoration: InputDecoration(
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: const BorderSide(color: Colors.red, width: 1.2),
+                ),
+                errorStyle:
+                    const TextStyle(fontSize: 16.0, color: Colors.white),
+                contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                filled: true,
+                hintStyle: const TextStyle(color: Colors.grey),
+                hintText: "Last Name",
+                prefixIcon: IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(userIcon),
+                ),
+                fillColor: kWhiteColor,
+                border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(40))),
+            controller: lastNameController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your last name.';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: size.height * 0.02),
+          TextFormField(
+            style: const TextStyle(color: kInputColor),
+            decoration: InputDecoration(
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: const BorderSide(color: Colors.red, width: 1.2),
+                ),
+                errorStyle:
+                    const TextStyle(fontSize: 16.0, color: Colors.white),
+                contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                filled: true,
+                hintStyle: const TextStyle(color: Colors.grey),
+                hintText: "Username",
+                prefixIcon: IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(userIcon),
+                ),
+                fillColor: kWhiteColor,
+                border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(40))),
+            controller: usernameController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a username.';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: size.height * 0.02),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: 250,
+                child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: _nextStep,
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      height: size.height * 0.07,
+                      decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                                blurRadius: 45,
+                                spreadRadius: 0,
+                                color: Color.fromRGBO(120, 37, 137, 0.25),
+                                offset: Offset(0, 25))
+                          ],
+                          borderRadius: BorderRadius.circular(40),
+                          color: kButtonColor),
+                      child: const Text(
+                        "Next",
+                        style: TextStyle(
+                            color: kWhiteColor, fontWeight: FontWeight.w600),
+                      ),
+                    )),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildCompanyInfoCard() {
     Size size = MediaQuery.of(context).size;
 
     return Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              style: const TextStyle(color: kInputColor),
-              decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.2),
-                  ),
-                  errorStyle:
-                      const TextStyle(fontSize: 16.0, color: Colors.white),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                  filled: true,
-                  hintText: "Company Name",
-                  prefixIcon: IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(userIcon),
-                  ),
-                  fillColor: kWhiteColor,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(40))),
-              controller: companyNameController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your company name.';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: size.height * 0.008),
-            TextFormField(
-              style: const TextStyle(color: kInputColor),
-              decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.2),
-                  ),
-                  errorStyle:
-                      const TextStyle(fontSize: 16.0, color: Colors.white),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                  filled: true,
-                  hintText: "Company Scale",
-                  prefixIcon: IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(userIcon),
-                  ),
-                  fillColor: kWhiteColor,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(40))),
-              controller: companyScaleController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your company Scale.';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: size.height * 0.008),
-            TextFormField(
-              style: const TextStyle(color: kInputColor),
-              decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.2),
-                  ),
-                  errorStyle:
-                      const TextStyle(fontSize: 16.0, color: Colors.white),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                  filled: true,
-                  hintText: "Description",
-                  prefixIcon: IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(userIcon),
-                  ),
-                  fillColor: kWhiteColor,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(40))),
-              controller: companyDescriptionController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your company Description.';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: size.height * 0.008),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  width: 120,
-                  child: CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed:_previousStep,
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        height: size.height * 0.07,
-                        decoration: BoxDecoration(
-                            boxShadow: const [
-                              BoxShadow(
-                                  blurRadius: 45,
-                                  spreadRadius: 0,
-                                  color: Color.fromRGBO(120, 37, 137, 0.25),
-                                  offset: Offset(0, 25))
-                            ],
-                            borderRadius: BorderRadius.circular(40),
-                            color: kButtonColor),
-                        child: const Text(
-                          "Previous",
-                          style: TextStyle(
-                              color: kWhiteColor, fontWeight: FontWeight.w600),
-                        ),
-                      )),
+      padding: const EdgeInsets.all(2.0),
+      child: Column(
+        children: <Widget>[
+          TextFormField(
+            style: const TextStyle(color: kInputColor),
+            decoration: InputDecoration(
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: const BorderSide(color: Colors.red, width: 1.2),
                 ),
-                SizedBox(
-                  width: 120,
-                  child: CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed:_nextStep,
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        height: size.height * 0.07,
-                        decoration: BoxDecoration(
-                            boxShadow: const [
-                              BoxShadow(
-                                  blurRadius: 45,
-                                  spreadRadius: 0,
-                                  color: Color.fromRGBO(120, 37, 137, 0.25),
-                                  offset: Offset(0, 25))
-                            ],
-                            borderRadius: BorderRadius.circular(40),
-                            color: kButtonColor),
-                        child: const Text(
-                          "Next",
-                          style: TextStyle(
-                              color: kWhiteColor, fontWeight: FontWeight.w600),
-                        ),
-                      )),
-                )
-              ],
-            ),
-          ],
-        ),
-      );
+                errorStyle:
+                    const TextStyle(fontSize: 16.0, color: Colors.white),
+                contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                filled: true,
+                hintStyle: const TextStyle(color: Colors.grey),
+                hintText: "Company Name",
+                prefixIcon: IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(userIcon),
+                ),
+                fillColor: kWhiteColor,
+                border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(40))),
+            controller: companyNameController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your company name.';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: size.height * 0.02),
+          TextFormField(
+            style: const TextStyle(color: kInputColor),
+            decoration: InputDecoration(
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: const BorderSide(color: Colors.red, width: 1.2),
+                ),
+                errorStyle:
+                    const TextStyle(fontSize: 16.0, color: Colors.white),
+                contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                filled: true,
+                hintStyle: const TextStyle(color: Colors.grey),
+                hintText: "Company Scale",
+                prefixIcon: IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(userIcon),
+                ),
+                fillColor: kWhiteColor,
+                border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(40))),
+            controller: companyScaleController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your company Scale.';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: size.height * 0.02),
+          TextFormField(
+            style: const TextStyle(color: kInputColor),
+            decoration: InputDecoration(
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: const BorderSide(color: Colors.red, width: 1.2),
+                ),
+                errorStyle:
+                    const TextStyle(fontSize: 16.0, color: Colors.white),
+                contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                filled: true,
+                hintStyle: const TextStyle(color: Colors.grey),
+                hintText: "Description",
+                prefixIcon: IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(userIcon),
+                ),
+                fillColor: kWhiteColor,
+                border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(40))),
+            controller: companyDescriptionController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your company Description.';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: size.height * 0.02),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: 120,
+                child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: _previousStep,
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      height: size.height * 0.07,
+                      decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                                blurRadius: 45,
+                                spreadRadius: 0,
+                                color: Color.fromRGBO(120, 37, 137, 0.25),
+                                offset: Offset(0, 25))
+                          ],
+                          borderRadius: BorderRadius.circular(40),
+                          color: kButtonColor),
+                      child: const Text(
+                        "Previous",
+                        style: TextStyle(
+                            color: kWhiteColor, fontWeight: FontWeight.w600),
+                      ),
+                    )),
+              ),
+              SizedBox(
+                width: 120,
+                child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: _nextStep,
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      height: size.height * 0.07,
+                      decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                                blurRadius: 45,
+                                spreadRadius: 0,
+                                color: Color.fromRGBO(120, 37, 137, 0.25),
+                                offset: Offset(0, 25))
+                          ],
+                          borderRadius: BorderRadius.circular(40),
+                          color: kButtonColor),
+                      child: const Text(
+                        "Next",
+                        style: TextStyle(
+                            color: kWhiteColor, fontWeight: FontWeight.w600),
+                      ),
+                    )),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildEmailPasswordCard() {
     Size size = MediaQuery.of(context).size;
+
+    Future<void> signUp() async {
+      const String url =
+          'https://bconnect-backend-main.onrender.com/app/createuser'; // Replace with your backend URL
+
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.headers['Content-Type'] = 'multipart/form-data';
+
+      request.fields['email'] = emailController.text;
+      request.fields['password'] = passwordController.text;
+      request.fields['username'] = usernameController.text;
+      request.fields['companyname'] = companyNameController.text;
+      request.fields['companyscale'] = companyScaleController.text;
+      request.fields['Products'] = jsonEncode(userProducts);
+      request.fields['firstname'] = firstNameController.text;
+      request.fields['lastname'] = lastNameController.text;
+      request.fields['description'] = companyDescriptionController.text;
+
+      // Attach the image file (if selected)
+      if (selectedImagePath != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'avatar', // Replace with the field name expected by your backend
+          selectedImagePath!,
+        ));
+      }
+      print(request.files);
+      var response = await request.send();
+      var responseData = await response.stream.toBytes();
+      var responseString = utf8.decode(responseData);
+
+      if (response.statusCode == 201) {
+        // Registration successful, return a success message or navigate to the login page
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const Login()));
+      } else {
+        emailController.clear();
+        passwordController.clear();
+        productController.clear();
+        userProducts.clear();
+        setState(() {
+          _currentStep = 0;
+        });
+        throw Exception('Error: ${response.statusCode}, $responseString');
+      }
+    }
+
     return Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              style: const TextStyle(color: kInputColor),
-              decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.2),
-                  ),
-                  errorStyle:
-                      const TextStyle(fontSize: 16.0, color: Colors.white),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                  filled: true,
-                  hintText: "Email",
-                  prefixIcon: IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(userIcon),
-                  ),
-                  fillColor: kWhiteColor,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(40))),
-              controller: emailController,
-              validator: (value) {
-                if (value == null || value.isEmpty || !value.contains('@')) {
-                  return 'Please enter a valid email address.';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: size.height * 0.008),
-            TextFormField(
-              style: const TextStyle(color: kInputColor),
-              decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.2),
-                  ),
-                  errorStyle:
-                      const TextStyle(fontSize: 16.0, color: Colors.white),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                  filled: true,
-                  hintText: "Password",
-                  prefixIcon: IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(keyIcon),
-                  ),
-                  fillColor: kWhiteColor,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(40))),
-              controller: passwordController,
-              obscureText: true,
-              validator: (value) {
-                if (value == null || value.isEmpty || value.length < 6) {
-                  return 'Password must be at least 6 characters.';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: size.height * 0.008),
-            TextFormField(
-              style: const TextStyle(color: kInputColor),
-              decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.2),
-                  ),
-                  errorStyle:
-                      const TextStyle(fontSize: 16.0, color: Colors.white),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                  filled: true,
-                  hintText: "Confirm Password",
-                  prefixIcon: IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(keyIcon),
-                  ),
-                  fillColor: kWhiteColor,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(40))),
-              controller: confirmPasswordController,
-              obscureText: true,
-              validator: (value) {
-                if (value == null || value != passwordController.text) {
-                  return 'Passwords do not match.';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: size.height * 0.008),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  width: 120,
-                  child: CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed:_previousStep,
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        height: size.height * 0.07,
-                        decoration: BoxDecoration(
-                            boxShadow: const [
-                              BoxShadow(
-                                  blurRadius: 45,
-                                  spreadRadius: 0,
-                                  color: Color.fromRGBO(120, 37, 137, 0.25),
-                                  offset: Offset(0, 25))
-                            ],
-                            borderRadius: BorderRadius.circular(40),
-                            color: kButtonColor),
-                        child: const Text(
-                          "Previous",
-                          style: TextStyle(
-                              color: kWhiteColor, fontWeight: FontWeight.w600),
-                        ),
-                      )),
+      padding: const EdgeInsets.all(2.0),
+      child: Column(
+        children: <Widget>[
+          TextFormField(
+            style: const TextStyle(color: kInputColor),
+            decoration: InputDecoration(
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: const BorderSide(color: Colors.red, width: 1.2),
                 ),
-                SizedBox(
+                errorStyle:
+                    const TextStyle(fontSize: 16.0, color: Colors.white),
+                contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                filled: true,
+                hintStyle: const TextStyle(color: Colors.grey),
+                hintText: "Email",
+                prefixIcon: IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(userIcon),
+                ),
+                fillColor: kWhiteColor,
+                border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(40))),
+            controller: emailController,
+            validator: (value) {
+              if (value == null || value.isEmpty || !value.contains('@')) {
+                return 'Please enter a valid email address.';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: size.height * 0.02),
+          TextFormField(
+            style: const TextStyle(color: kInputColor),
+            decoration: InputDecoration(
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: const BorderSide(color: Colors.red, width: 1.2),
+                ),
+                errorStyle:
+                    const TextStyle(fontSize: 16.0, color: Colors.white),
+                contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                filled: true,
+                hintStyle: const TextStyle(color: Colors.grey),
+                hintText: "Password",
+                prefixIcon: IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(keyIcon),
+                ),
+                fillColor: kWhiteColor,
+                border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(40))),
+            controller: passwordController,
+            obscureText: true,
+            validator: (value) {
+              if (value == null || value.isEmpty || value.length < 6) {
+                return 'Password must be at least 6 characters.';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: size.height * 0.02),
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  style: const TextStyle(color: kInputColor),
+                  decoration: InputDecoration(
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide:
+                            const BorderSide(color: Colors.red, width: 1.2),
+                      ),
+                      errorStyle:
+                          const TextStyle(fontSize: 16.0, color: Colors.white),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                      filled: true,
+                      hintStyle: const TextStyle(color: Colors.grey),
+                      hintText: "Add your products",
+                      prefixIcon: IconButton(
+                        onPressed: () {},
+                        icon: SvgPicture.asset(userIcon),
+                      ),
+                      fillColor: kWhiteColor,
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(40))),
+                  controller: productController,
+                  onFieldSubmitted: (value) {
+                    setState(() {
+                      userProducts.add(value);
+                      productController.clear();
+                    });
+                  },
+                ),
+              ),
+              SizedBox(width: size.width * 0.008),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    userProducts.add(productController.text);
+                    productController.clear();
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(
+                      5), // Adjust the padding to make it smaller
+                  decoration: BoxDecoration(
+                    color: kButtonColor, // Customize the button color
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 20, // Adjust the size of the Icon
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: size.height * 0.02),
+          Wrap(
+            alignment: WrapAlignment.start,
+            spacing: 8.0, // Adjust the spacing between input fields
+            children: [
+              for (int i = 0; i < userProducts.length; i++)
+                Chip(
+                  label: Text(
+                    userProducts[i],
+                    style: const TextStyle(
+                        color: Colors.purple), // Set text color to purple
+                  ),
+                  onDeleted: () {
+                    setState(() {
+                      userProducts.removeAt(i);
+                    });
+                  },
+                  backgroundColor:
+                      Colors.white, // Set the background color to white
+                ),
+            ],
+          ),
+          SizedBox(height: size.height * 0.02),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: 120,
+                child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: _previousStep,
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      height: size.height * 0.07,
+                      decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                                blurRadius: 45,
+                                spreadRadius: 0,
+                                color: Color.fromRGBO(120, 37, 137, 0.25),
+                                offset: Offset(0, 25))
+                          ],
+                          borderRadius: BorderRadius.circular(40),
+                          color: kButtonColor),
+                      child: const Text(
+                        "Previous",
+                        style: TextStyle(
+                            color: kWhiteColor, fontWeight: FontWeight.w600),
+                      ),
+                    )),
+              ),
+              SizedBox(
                   width: 120,
                   child: CupertinoButton(
-                      padding: EdgeInsets.zero,onPressed: () {
-                    Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Login()));
-                  },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        height: size.height * 0.07,
-                        decoration: BoxDecoration(
-                            boxShadow: const [
-                              BoxShadow(
-                                  blurRadius: 45,
-                                  spreadRadius: 0,
-                                  color: Color.fromRGBO(120, 37, 137, 0.25),
-                                  offset: Offset(0, 25))
-                            ],
-                            borderRadius: BorderRadius.circular(40),
-                            color: kButtonColor),
-                        child: const Text(
-                          "Sign In",
-                          style: TextStyle(
-                              color: kWhiteColor, fontWeight: FontWeight.w600),
+                    padding: EdgeInsets.zero,
+                    onPressed:
+                        signUp, // Call the signUp function when the button is pressed
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      height: size.height * 0.07,
+                      decoration: BoxDecoration(
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 45,
+                            spreadRadius: 0,
+                            color: Color.fromRGBO(120, 37, 137, 0.25),
+                            offset: Offset(0, 25),
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(40),
+                        color: kButtonColor,
+                      ),
+                      child: const Text(
+                        "Sign In",
+                        style: TextStyle(
+                          color: kWhiteColor,
+                          fontWeight: FontWeight.w600,
                         ),
-                      )),
-                )
-              ],
-            ),
-          ],
-        ),
-      );
+                      ),
+                    ),
+                  ))
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

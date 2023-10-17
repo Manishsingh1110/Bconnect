@@ -115,13 +115,8 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     Widget followersSection() {
-      return Container(
+      return SizedBox(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white, Colors.white60],
-          ),
-        ),
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
@@ -165,13 +160,8 @@ class _SearchState extends State<Search> {
     }
 
     Widget buildRecommendedUsers() {
-      return Container(
+      return SizedBox(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white, Colors.white60],
-          ),
-        ),
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
@@ -207,13 +197,8 @@ class _SearchState extends State<Search> {
     }
 
     Widget buildRecommendedGroups() {
-      return Container(
+      return SizedBox(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white, Colors.white60],
-          ),
-        ),
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
@@ -249,7 +234,6 @@ class _SearchState extends State<Search> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -267,6 +251,7 @@ class _SearchState extends State<Search> {
                   },
                   decoration: InputDecoration(
                     hintText: "Search...",
+                    hintStyle: const TextStyle(color: Colors.grey),
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),

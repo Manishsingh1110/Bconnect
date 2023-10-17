@@ -1,4 +1,3 @@
-import 'package:bconnect/components/constrant.dart';
 import 'package:bconnect/models/user.dart';
 import 'package:flutter/material.dart';
 
@@ -27,9 +26,12 @@ class _ChatsState extends State<Chats> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    Color primaryColor = theme.primaryColor;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: navbar,
+        backgroundColor: primaryColor,
         title: Row(
           children: [
             CircleAvatar(
@@ -83,10 +85,13 @@ class _ChatsState extends State<Chats> {
   }
 
   Widget _buildMessageInput() {
+    ThemeData theme = Theme.of(context);
+    Color primaryColor = theme.primaryColor;
+    Color hintColor = theme.hintColor;
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: primaryColor,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
@@ -102,18 +107,20 @@ class _ChatsState extends State<Chats> {
               controller: messageController,
               decoration: InputDecoration(
                 hintText: 'Type a message...',
+                hintStyle: const TextStyle(color: Colors.grey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25.0),
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Colors.grey[200],
+                fillColor:
+                    (hintColor == Colors.black) ? Colors.grey : hintColor,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
               ),
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.send),
+            icon: const Icon(Icons.send, color: Colors.white),
             onPressed: _sendMessage,
           ),
         ],

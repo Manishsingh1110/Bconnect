@@ -7,10 +7,10 @@ String keyIcon = "assets/icon/key_icon.svg";
 
 // App Colors.
 
-const Color g1 = Color.fromARGB(255, 243, 235, 239);
-const Color g2 = Color.fromARGB(255, 167, 34, 197);
+const Color g1 = Colors.white;
+const Color g2 = Colors.indigo;
 const Color kInputColor = Color(0xff3C3C43);
-const Color kButtonColor = Color(0xff78258B);
+const Color kButtonColor = Colors.indigo;
 const Color kWhiteColor = Colors.white;
 
 const Color navbar = Color(0xFF9966CC);

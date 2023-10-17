@@ -1,5 +1,4 @@
 import 'package:bconnect/components/addnewgroup.dart';
-import 'package:bconnect/components/constrant.dart';
 import 'package:bconnect/models/group.dart';
 import 'package:bconnect/state/state.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +17,11 @@ class _GroupPageState extends State<GroupPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    Color primaryColor = theme.primaryColor;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: navbar,
+        backgroundColor: primaryColor,
         title: const Text('Groups'),
       ),
       body: Container(
@@ -40,14 +41,17 @@ class _GroupPageState extends State<GroupPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: kButtonColor,
+        backgroundColor: primaryColor,
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const CreateGroupScreen()),
           );
         },
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }

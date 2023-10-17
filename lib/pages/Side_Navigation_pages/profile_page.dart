@@ -1,5 +1,4 @@
 import 'package:bconnect/components/allfollowers.dart';
-import 'package:bconnect/components/constrant.dart';
 import 'package:bconnect/components/followercard.dart';
 import 'package:bconnect/components/recommendedgroupcard.dart';
 import 'package:bconnect/components/recommendedusercard.dart';
@@ -137,13 +136,16 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    ThemeData theme = Theme.of(context);
+    Color primaryColor = theme.primaryColor;
+    Color hintColor = theme.hintColor;
 
     Widget followersSection() {
       return Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.white, Colors.white60],
+            colors: [hintColor, hintColor],
           ),
         ),
         child: Padding(
@@ -205,9 +207,9 @@ class _ProfileState extends State<Profile> {
     Widget buildRecommendedUsers() {
       return Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.white, Colors.white60],
+            colors: [hintColor, hintColor],
           ),
         ),
         child: Padding(
@@ -245,9 +247,9 @@ class _ProfileState extends State<Profile> {
     Widget buildRecommendedGroups() {
       return Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.white, Colors.white60],
+            colors: [hintColor, hintColor],
           ),
         ),
         child: Padding(
@@ -284,7 +286,7 @@ class _ProfileState extends State<Profile> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: navbar,
+        backgroundColor: primaryColor,
         title: const Text("My Profile Page"),
         actions: [
           IconButton(
@@ -317,9 +319,9 @@ class _ProfileState extends State<Profile> {
                 Container(
                   height: 200,
                   width: double.infinity,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.white, Colors.white60],
+                      colors: [hintColor, hintColor],
                     ),
                   ),
                   child: Stack(
@@ -380,12 +382,12 @@ class _ProfileState extends State<Profile> {
                 ),
               ],
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 2),
             Container(
               width: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.white, Colors.white60],
+                  colors: [hintColor, hintColor],
                 ),
               ),
               child: Padding(
@@ -470,15 +472,10 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
             ),
-            const SizedBox(height: 15),
-            Container(
+            const SizedBox(height: 2),
+            const SizedBox(
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.white, Color.fromARGB(153, 252, 250, 250)],
-                  ),
-                ),
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.all(15),
                   child: Text(
                     "Activities",
@@ -534,11 +531,11 @@ class _ProfileState extends State<Profile> {
                 ),
               ],
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 2),
             followersSection(),
-            const SizedBox(height: 15),
+            const SizedBox(height: 2),
             buildRecommendedUsers(),
-            const SizedBox(height: 15),
+            const SizedBox(height: 2),
             buildRecommendedGroups()
           ],
         ),

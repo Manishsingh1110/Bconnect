@@ -1,5 +1,4 @@
 import 'package:bconnect/components/addpoll.dart';
-import 'package:bconnect/components/constrant.dart';
 import 'package:bconnect/models/postcard.dart';
 import 'package:bconnect/state/state.dart';
 import 'package:flutter/material.dart';
@@ -43,10 +42,12 @@ class _AddpostState extends State<Addpost> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    Color primaryColor = theme.primaryColor;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Post"),
-        backgroundColor: navbar, // Change to your desired color
+        backgroundColor: primaryColor, // Change to your desired color
         leading: IconButton(
           icon: const Icon(Icons.clear),
           onPressed: () {
@@ -132,23 +133,23 @@ class _AddpostState extends State<Addpost> {
           Align(
             alignment: Alignment.bottomCenter,
             child: FloatingActionButton(
-              backgroundColor: navbar,
+              backgroundColor: primaryColor,
               onPressed: () {
                 _selectImages();
               },
-              child: const Icon(Icons.image),
+              child: const Icon(Icons.image, color: Colors.white),
             ),
           ),
           const SizedBox(width: 16.0),
           Align(
             alignment: Alignment.bottomCenter,
             child: FloatingActionButton(
-              backgroundColor: navbar,
+              backgroundColor: primaryColor,
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const AddPoll()));
               },
-              child: const Icon(Icons.poll),
+              child: const Icon(Icons.poll, color: Colors.white),
             ),
           ),
         ],

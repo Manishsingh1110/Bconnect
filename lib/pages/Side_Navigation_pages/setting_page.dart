@@ -29,7 +29,7 @@ class _SettingState extends State<Setting> {
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
           ListTile(
-            title: const Text('System Mode'),
+            title: const Text('Dark Mode'),
             trailing: Switch(
               value: themeProvider.useManualTheme,
               onChanged: (bool value) {
