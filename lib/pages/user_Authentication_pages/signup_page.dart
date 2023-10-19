@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:bconnect/state/state.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -21,6 +22,7 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   int _currentStep = 0;
+  bool isLoading = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selectedImagePath;
   List<String> userProducts = [];
@@ -102,93 +104,100 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        body: Center(
-            child: Container(
-                height: double.maxFinite,
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [g1, g2])),
-                child: SingleChildScrollView(
-                    padding: EdgeInsets.all(size.height * 0.03),
-                    child: Column(
-                        mainAxisAlignment:
-                            MainAxisAlignment.center, // Center vertically
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(height: size.height * 0.05),
-                          GestureDetector(
-                            onTap: _pickImage,
-                            child: selectedImagePath == null
-                                ? CircleAvatar(
-                                    radius: 50,
-                                    backgroundColor: Colors.grey[200],
-                                    child: const Icon(
-                                      Icons.camera_alt,
-                                      size: 40,
-                                      color: Colors.grey,
-                                    ),
-                                  )
-                                : ClipOval(
-                                    child: Image.file(
-                                      File(selectedImagePath!),
-                                      width: 150,
-                                      height: 150,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                          ),
-                          SizedBox(height: size.height * 0.02),
-                          const Text(
-                            "Please , Sign In.",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 34,
-                              color: kWhiteColor,
+        body: Stack(children: [
+      Container(
+          height: double.maxFinite,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [g1, g2])),
+          child: SingleChildScrollView(
+              padding: EdgeInsets.all(size.height * 0.03),
+              child: Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Center vertically
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: size.height * 0.05),
+                    GestureDetector(
+                      onTap: _pickImage,
+                      child: selectedImagePath == null
+                          ? CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Colors.grey[200],
+                              child: const Icon(
+                                Icons.camera_alt,
+                                size: 40,
+                                color: Colors.grey,
+                              ),
+                            )
+                          : ClipOval(
+                              child: Image.file(
+                                File(selectedImagePath!),
+                                width: 150,
+                                height: 150,
+                                fit: BoxFit.cover,
+                              ),
                             ),
+                    ),
+                    SizedBox(height: size.height * 0.02),
+                    const Text(
+                      "Please , Sign In.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 34,
+                        color: kWhiteColor,
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.02),
+                    Form(
+                      key: _formKey,
+                      child: _buildStep(),
+                    ),
+                    SizedBox(height: size.height * 0.02),
+                    SvgPicture.asset("assets/icon/deisgn.svg"),
+                    SizedBox(height: size.height * 0.02),
+                    CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Login()));
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: double.infinity,
+                          height: size.height * 0.07,
+                          decoration: BoxDecoration(
+                              boxShadow: const [
+                                BoxShadow(
+                                    blurRadius: 45,
+                                    spreadRadius: 0,
+                                    color: Color.fromRGBO(120, 37, 137, 0.25),
+                                    offset: Offset(0, 25))
+                              ],
+                              borderRadius: BorderRadius.circular(40),
+                              color: const Color.fromRGBO(225, 225, 225, 0.25)),
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(
+                                color: kWhiteColor,
+                                fontWeight: FontWeight.w600),
                           ),
-                          SizedBox(height: size.height * 0.02),
-                          Form(
-                            key: _formKey,
-                            child: _buildStep(),
-                          ),
-                          SizedBox(height: size.height * 0.02),
-                          SvgPicture.asset("assets/icon/deisgn.svg"),
-                          SizedBox(height: size.height * 0.02),
-                          CupertinoButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Login()));
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: double.infinity,
-                                height: size.height * 0.07,
-                                decoration: BoxDecoration(
-                                    boxShadow: const [
-                                      BoxShadow(
-                                          blurRadius: 45,
-                                          spreadRadius: 0,
-                                          color: Color.fromRGBO(
-                                              120, 37, 137, 0.25),
-                                          offset: Offset(0, 25))
-                                    ],
-                                    borderRadius: BorderRadius.circular(40),
-                                    color: const Color.fromRGBO(
-                                        225, 225, 225, 0.25)),
-                                child: const Text(
-                                  "Login",
-                                  style: TextStyle(
-                                      color: kWhiteColor,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              )),
-                        ])))));
+                        )),
+                    if (isLoading)
+                      Container(
+                        color: Colors.black
+                            .withOpacity(0.5), // Adjust opacity for blur effect
+                        child: Center(
+                          child: customLoadingIndicator(),
+                        ),
+                      ),
+                  ])))
+    ]));
   }
 
   Widget _buildStep() {
@@ -300,40 +309,11 @@ class _SignupPageState extends State<SignupPage> {
             },
           ),
           SizedBox(height: size.height * 0.02),
-          DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              filled: true,
-              hintStyle: const TextStyle(color: Colors.grey),
-              fillColor: kWhiteColor,
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(40),
-              ),
-            ),
-            value: selectedProfileType,
-            onChanged: (String? newValue) {
-              // Specify the type as 'String?' or 'String'
-              if (newValue != null) {
-                // Check for null value
-                setState(() {
-                  selectedProfileType = newValue;
-                });
-              }
-            },
-            items: profileTypes.map((type) {
-              return DropdownMenuItem<String>(
-                value: type,
-                child: Text(type),
-              );
-            }).toList(),
-          ),
-
-          SizedBox(height: size.height * 0.02),
 
           // About Us Text Field
           TextFormField(
             style: const TextStyle(color: kInputColor),
-            maxLines: 4, // Multiline text box
+            maxLines: 5, // Multiline text box
             decoration: InputDecoration(
               filled: true,
               hintStyle: const TextStyle(color: Colors.grey),
@@ -343,6 +323,8 @@ class _SignupPageState extends State<SignupPage> {
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(40),
               ),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 25.0, horizontal: 20.0),
             ),
             controller: aboutUsController,
             validator: (value) {
@@ -352,6 +334,7 @@ class _SignupPageState extends State<SignupPage> {
               return null;
             },
           ),
+          SizedBox(height: size.height * 0.02),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -396,6 +379,36 @@ class _SignupPageState extends State<SignupPage> {
       padding: const EdgeInsets.all(2.0),
       child: Column(
         children: <Widget>[
+          DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              filled: true,
+              hintStyle: const TextStyle(color: Colors.grey),
+              fillColor: kWhiteColor,
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(40),
+              ),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+            ),
+            value: selectedProfileType,
+            onChanged: (String? newValue) {
+              // Specify the type as 'String?' or 'String'
+              if (newValue != null) {
+                // Check for null value
+                setState(() {
+                  selectedProfileType = newValue;
+                });
+              }
+            },
+            items: profileTypes.map((type) {
+              return DropdownMenuItem<String>(
+                value: type,
+                child: Text(type),
+              );
+            }).toList(),
+          ),
+          SizedBox(height: size.height * 0.02),
           TextFormField(
             style: const TextStyle(color: kInputColor),
             decoration: InputDecoration(
@@ -552,6 +565,9 @@ class _SignupPageState extends State<SignupPage> {
     Size size = MediaQuery.of(context).size;
 
     Future<void> signUp() async {
+      setState(() {
+        isLoading = true;
+      });
       const String url =
           'https://bconnect-backend-main.onrender.com/app/createuser'; // Replace with your backend URL
 
@@ -583,11 +599,17 @@ class _SignupPageState extends State<SignupPage> {
       var responseString = utf8.decode(responseData);
 
       if (response.statusCode == 201) {
+        setState(() {
+          isLoading = false;
+        });
         // Registration successful, return a success message or navigate to the login page
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const Login()));
       } else {
+        setState(() {
+          isLoading = false;
+        });
         emailController.clear();
         passwordController.clear();
         productController.clear();

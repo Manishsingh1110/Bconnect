@@ -145,7 +145,7 @@ class _ProfileState extends State<Profile> {
 
     String displayName;
 
-    if (storedUser?['profileType'] == 'Company') {
+    if (storedUser?['profileType'] == 'company') {
       displayName = storedUser?['companyname'] ?? 'No name available';
     } else {
       if (storedUser?['firstname'] != null && storedUser?['lastname'] != null) {

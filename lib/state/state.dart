@@ -7,6 +7,7 @@ import 'package:bconnect/state/darktheme.dart';
 import 'package:bconnect/state/lighttheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ThemeProvider with ChangeNotifier {
   bool _useManualTheme = false;
@@ -217,13 +218,18 @@ class Userlogin extends ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>?> retrievejwt() async {
+  Future<String?> retrieveJwt() async {
     final prefs = await SharedPreferences.getInstance();
     final storedJwtToken = prefs.getString('jwtToken');
-    if (storedJwtToken != null) {
-      return jsonDecode(storedJwtToken);
-    } else {
-      return null; // Handle the case where the data is not found
-    }
+    return storedJwtToken;
   }
+}
+
+Widget customLoadingIndicator() {
+  return const Center(
+    child: SpinKitFadingCircle(
+      color: Colors.blue, // Customize the color to match your design
+      size: 50.0, // Customize the size
+    ),
+  );
 }
