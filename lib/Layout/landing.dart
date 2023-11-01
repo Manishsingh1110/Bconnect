@@ -173,14 +173,14 @@ class _LandingState extends State<Landing> {
 class NavDrawer extends StatelessWidget {
   final String userName;
   final String userAvatarUrl;
+  
   const NavDrawer(
       {Key? key, required this.userName, required this.userAvatarUrl})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final String url =
-        "https://bconnect-backend-main.onrender.com/$userAvatarUrl";
+    print(userAvatarUrl);
     ThemeData theme = Theme.of(context);
     Color primaryColor = theme.primaryColor;
     return Drawer(
@@ -210,7 +210,7 @@ class NavDrawer extends StatelessWidget {
                     CircleAvatar(
                       radius: 35, // Reduce the size of the avatar
                       backgroundImage: NetworkImage(
-                          url), // Use NetworkImage for online image
+                          userAvatarUrl), // Use NetworkImage for online image
                     ),
                     const SizedBox(width: 15),
                     Text(

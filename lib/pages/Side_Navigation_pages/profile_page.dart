@@ -140,8 +140,7 @@ class _ProfileState extends State<Profile> {
     Color primaryColor = theme.primaryColor;
     Color hintColor = theme.hintColor;
     final userAvatarUrl = storedUser?['avatar'] ?? '/';
-    final String url =
-        "https://bconnect-backend-main.onrender.com/$userAvatarUrl";
+    
 
     String displayName;
 
@@ -390,7 +389,7 @@ class _ProfileState extends State<Profile> {
                       CircleAvatar(
                         radius: 60,
                         backgroundImage: NetworkImage(
-                          url,
+                          userAvatarUrl,
                         ),
                       ),
                     ],
