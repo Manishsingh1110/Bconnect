@@ -1,120 +1,64 @@
 import 'dart:convert';
-
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:bconnect/models/group.dart';
 import 'package:bconnect/models/postcard.dart';
 import 'package:bconnect/models/user.dart';
 import 'package:bconnect/state/darktheme.dart';
 import 'package:bconnect/state/lighttheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class ThemeProvider with ChangeNotifier {
-  bool _useManualTheme = false;
-  final ThemeData _lightTheme = lightTheme;
-  final ThemeData _darkTheme = darkTheme;
+class PostNotifier extends ChangeNotifier {
+  List<Post> _postData = [];
+  List<Post> get postData => _postData;
 
-  ThemeData get theme => _useManualTheme ? _darkTheme : _lightTheme;
+  Future<void> fetchData() async {
+    final Uri apiUrl =
+        Uri.parse('https://bconnect-backend-main.onrender.com/app/getpost');
 
-  bool get useManualTheme => _useManualTheme;
+    final response = await http.get(apiUrl);
 
-  void toggleTheme() {
-    _useManualTheme = !_useManualTheme;
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body);
+      final List<Post> postList =
+          responseData.map((data) => Post.fromJson(data)).toList();
+      setPostData(postList);
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  // This method can be called to initialize the data fetching
+  Future<void> initData() async {
+    await fetchData();
+  }
+
+  // Add this method to set the data and notify listeners
+  void setPostData(List<Post> newData) {
+    _postData = newData;
     notifyListeners();
   }
 }
 
-class PostListModel extends ChangeNotifier {
+class PostListModel with ChangeNotifier {
   List<Post> posts = [];
 
   PostListModel() {
-    posts = [
-      Post(
-        userName: 'Priyo Vommb',
-        userImage: "assets/images/cool-profile-picture-natural-light.webp",
-        timeAgo: '2 hours ago',
-        likeCount: 45,
-        commentCount: 12,
-        postText:
-            'This is a sample social media post text with a single image. You can replace it with your own content.',
-        postImages: ['assets/images/image_2.jpg'],
-      ),
-      Post(
-        userName: 'Priyo Vommb',
-        userImage: "assets/images/cool-profile-picture-natural-light.webp",
-        timeAgo: '2 hours ago',
-        likeCount: 45,
-        commentCount: 12,
-        postText:
-            'This is another sample social media post text with multiple images. You can replace it with your own content.This is another sample social media post text with multiple images. You can replace it with your own content.This is another sample social media post text with multiple images. You can replace it with your own content.This is another sample social media post text with multiple images. You can replace it with your own content.',
-        postImages: [
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-        ],
-      ),
-      Post(
-        userName: 'Priyo Vommb',
-        userImage: "assets/images/cool-profile-picture-natural-light.webp",
-        timeAgo: '2 hours ago',
-        likeCount: 45,
-        commentCount: 12,
-        postText:
-            'This is another sample social media post text with multiple images. You can replace it with your own content.',
-        postImages: [
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-        ],
-      ),
-      Post(
-        userName: 'Priyo Vommb',
-        userImage: "assets/images/cool-profile-picture-natural-light.webp",
-        timeAgo: '2 hours ago',
-        likeCount: 45,
-        commentCount: 12,
-        postText:
-            'This is another sample social media post text with multiple images. You can replace it with your own content.',
-        postImages: [
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-        ],
-      ),
-      Post(
-        userName: 'Priyo Vommb',
-        userImage: "assets/images/cool-profile-picture-natural-light.webp",
-        timeAgo: '2 hours ago',
-        likeCount: 45,
-        commentCount: 12,
-        postText:
-            'This is another sample social media post text with multiple images. You can replace it with your own content.',
-        postImages: [
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-        ],
-      ),
-      Post(
-        userName: 'Priyo Vommb',
-        userImage: "assets/images/cool-profile-picture-natural-light.webp",
-        timeAgo: '2 hours ago',
-        likeCount: 45,
-        commentCount: 12,
-        postText:
-            'This is another sample social media post text with multiple images. You can replace it with your own content.',
-        postImages: [
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-          'assets/images/image_2.jpg',
-        ],
-      )
-    ];
+    posts;
+  }
+  void fetchPostsFromApi() async {
+    final response = await http.get(
+        Uri.parse('https://bconnect-backend-main.onrender.com/app/getpost'));
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body);
+      posts = responseData
+          .map((data) => Post.fromJson(data as Map<String, dynamic>))
+          .toList();
+      notifyListeners(); // Notify listeners when the data changes
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
 
   void addPost(Post newPost) {
@@ -232,4 +176,19 @@ Widget customLoadingIndicator() {
       size: 50.0, // Customize the size
     ),
   );
+}
+
+class ThemeProvider with ChangeNotifier {
+  bool _useManualTheme = false;
+  final ThemeData _lightTheme = lightTheme;
+  final ThemeData _darkTheme = darkTheme;
+
+  ThemeData get theme => _useManualTheme ? _darkTheme : _lightTheme;
+
+  bool get useManualTheme => _useManualTheme;
+
+  void toggleTheme() {
+    _useManualTheme = !_useManualTheme;
+    notifyListeners();
+  }
 }

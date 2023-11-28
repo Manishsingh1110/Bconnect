@@ -173,14 +173,13 @@ class _LandingState extends State<Landing> {
 class NavDrawer extends StatelessWidget {
   final String userName;
   final String userAvatarUrl;
-  
+
   const NavDrawer(
       {Key? key, required this.userName, required this.userAvatarUrl})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(userAvatarUrl);
     ThemeData theme = Theme.of(context);
     Color primaryColor = theme.primaryColor;
     return Drawer(

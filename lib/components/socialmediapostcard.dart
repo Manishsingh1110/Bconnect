@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:ui';
@@ -27,7 +29,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
             onTap: () {
               _showImageDialog(context, widget.post.postImages![0]);
             },
-            child: Image.asset(
+            child: Image.network(
               widget.post.postImages![0],
               fit: BoxFit.cover,
               width: double.infinity,
@@ -46,7 +48,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                   onTap: () {
                     _showImageDialog(context, widget.post.postImages![0]);
                   },
-                  child: Image.asset(
+                  child: Image.network(
                     widget.post.postImages![0],
                     fit: BoxFit.cover,
                   ),
@@ -63,7 +65,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                   onTap: () {
                     _showImageDialog(context, widget.post.postImages![1]);
                   },
-                  child: Image.asset(
+                  child: Image.network(
                     widget.post.postImages![1],
                     fit: BoxFit.cover,
                   ),
@@ -81,7 +83,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                 onTap: () {
                   _showImageDialog(context, widget.post.postImages![0]);
                 },
-                child: Image.asset(
+                child: Image.network(
                   widget.post.postImages![0],
                   fit: BoxFit.cover,
                   width: double.infinity,
@@ -100,7 +102,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![1]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![1],
                         fit: BoxFit.cover,
                       ),
@@ -117,7 +119,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![2]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![2],
                         fit: BoxFit.cover,
                       ),
@@ -142,7 +144,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![0]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![0],
                         fit: BoxFit.cover,
                       ),
@@ -159,7 +161,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![1]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![1],
                         fit: BoxFit.cover,
                       ),
@@ -180,7 +182,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![2]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![2],
                         fit: BoxFit.cover,
                       ),
@@ -197,7 +199,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![3]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![3],
                         fit: BoxFit.cover,
                       ),
@@ -222,7 +224,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![0]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![0],
                         fit: BoxFit.cover,
                       ),
@@ -239,7 +241,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![1]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![1],
                         fit: BoxFit.cover,
                       ),
@@ -260,7 +262,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![2]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![2],
                         fit: BoxFit.cover,
                       ),
@@ -277,7 +279,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![3]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![3],
                         fit: BoxFit.cover,
                       ),
@@ -294,7 +296,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![4]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![4],
                         fit: BoxFit.cover,
                       ),
@@ -327,7 +329,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![0]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![0],
                         fit: BoxFit.cover,
                       ),
@@ -344,7 +346,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![1]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![1],
                         fit: BoxFit.cover,
                       ),
@@ -365,7 +367,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![2]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![2],
                         fit: BoxFit.cover,
                       ),
@@ -382,7 +384,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                       onTap: () {
                         _showImageDialog(context, widget.post.postImages![3]);
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.post.postImages![3],
                         fit: BoxFit.cover,
                       ),
@@ -397,7 +399,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                     children: [
                       ImageFiltered(
                         imageFilter: ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),
-                        child: Image.asset(
+                        child: Image.network(
                           widget.post.postImages![
                               4], // Use an image as a background for the text
                           fit: BoxFit.cover,
@@ -442,10 +444,12 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
           children: <Widget>[
             ListTile(
               leading: CircleAvatar(
-                backgroundImage: AssetImage(widget.post.userImage),
+                backgroundImage: widget.post.userImage != null
+                    ? NetworkImage(widget.post.userImage) as ImageProvider
+                    : const AssetImage('fallback_image_path'),
               ),
               title: Text(widget.post.userName),
-              subtitle: Text(widget.post.timeAgo),
+              subtitle: Text(widget.post.timeAgo ?? 'Unknown Time'),
               trailing: PopupMenuButton<String>(
                 onSelected: (value) {
                   // Handle menu item selection here
@@ -548,7 +552,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
             onTap: () {
               Navigator.of(context).pop(); // Close the dialog when tapped
             },
-            child: Image.asset(
+            child: Image.network(
               imagePath,
               fit: BoxFit.cover,
             ),
@@ -584,7 +588,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8.0), // Add horizontal spacing
-                      child: Image.asset(
+                      child: Image.network(
                         imagePath,
                         fit:
                             BoxFit.contain, // Show the image at its entire size
