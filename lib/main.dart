@@ -6,8 +6,20 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (context) => PostListModel()),
-      ChangeNotifierProvider(create: (context) => GroupListModel()),
+      ChangeNotifierProvider(
+        create: (context) {
+          var notifier = PostListModel();
+          notifier.initData(); // Initialize data fetching
+          return notifier;
+        },
+      ),
+      ChangeNotifierProvider(
+        create: (context) {
+          var notifier = GroupListModel();
+          notifier.initData(); // Initialize data fetching
+          return notifier;
+        },
+      ),
       ChangeNotifierProvider(create: (context) => ChatUserModel()),
       ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ChangeNotifierProvider(

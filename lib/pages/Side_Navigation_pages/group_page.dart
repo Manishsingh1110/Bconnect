@@ -17,6 +17,7 @@ class _GroupPageState extends State<GroupPage> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<GroupListModel>(context, listen: false).initData();
     ThemeData theme = Theme.of(context);
     Color primaryColor = theme.primaryColor;
     return Scaffold(
@@ -67,7 +68,7 @@ class _GroupPageState extends State<GroupPage> {
           children: [
             CircleAvatar(
               radius: 40,
-              backgroundImage: AssetImage(group.imageUrl),
+              backgroundImage: NetworkImage(group.imageUrl),
             ),
             const SizedBox(width: 16),
             Expanded(

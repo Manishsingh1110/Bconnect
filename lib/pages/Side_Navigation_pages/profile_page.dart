@@ -1,4 +1,5 @@
 import 'package:bconnect/components/allfollowers.dart';
+import 'package:bconnect/components/allpost.dart';
 import 'package:bconnect/components/followercard.dart';
 import 'package:bconnect/components/recommendedgroupcard.dart';
 import 'package:bconnect/components/recommendedusercard.dart';
@@ -140,7 +141,6 @@ class _ProfileState extends State<Profile> {
     Color primaryColor = theme.primaryColor;
     Color hintColor = theme.hintColor;
     final userAvatarUrl = storedUser?['avatar'] ?? '/';
-    
 
     String displayName;
 
@@ -532,7 +532,7 @@ class _ProfileState extends State<Profile> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          const AllFollowersPage(),
+                                          const AllPostsPage(),
                                     ),
                                   );
                                 },

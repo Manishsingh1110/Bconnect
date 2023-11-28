@@ -1,6 +1,9 @@
+// ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+import 'package:bconnect/state/state.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({Key? key}) : super(key: key);
@@ -76,6 +79,64 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
     setState(() {
       industries.remove(industry);
     });
+  }
+
+  Future<void> _createGroup() async {
+    try {
+      // Define the API endpoint for creating a new group
+      const apiUrl =
+          'https://bconnect-backend-main.onrender.com/app/createGroup';
+      final Userlogin userLogin = Userlogin();
+      final String? jwtToken = await userLogin.retrieveJwt();
+      // Create a FormData object for sending multipart/form-data
+
+      final formData = http.MultipartRequest('POST', Uri.parse(apiUrl));
+
+      // Add fields to the FormData
+      formData.fields.addAll({
+        'name': groupName,
+        'description': groupDescription,
+        'location': groupLocation,
+        'industriesproduct':
+            industries.join(','), // Convert list to comma-separated string
+        // Add other fields as needed
+      });
+      formData.headers.addAll({
+        'Content-Type': 'application/json',
+        'auth-token': jwtToken!,
+      });
+      // Add avatar image file to the FormData
+      if (selectedImagePath != null) {
+        formData.files.add(await http.MultipartFile.fromPath(
+          'avatar',
+          selectedImagePath!,
+        ));
+      }
+
+      // Add background image file to the FormData
+      if (selectedBackgroundImagePath != null) {
+        formData.files.add(
+          await http.MultipartFile.fromPath(
+            'backgroundavatar',
+            selectedBackgroundImagePath!,
+          ),
+        );
+      }
+      final response = await http.Response.fromStream(await formData.send());
+
+      // Check if the request was successful (status code 2xx)
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        // Handle success, e.g., navigate to the next screen
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      } else {
+        // Handle errors
+        print('Failed to create group. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('Error creating group: $e');
+    }
   }
 
   @override
@@ -314,10 +375,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                           onPressed: (isPublic ||
                                   isMembersOnly ||
                                   isInvitationOnly)
-                              ? () {
-                                  Navigator.pop(
-                                      context); // Close the create group screen
-                                }
+                              ? _createGroup // Call the function to create a group
                               : null, // Disable the button if no permissions are selected
                           child: const Text('Create Group'),
                         ),

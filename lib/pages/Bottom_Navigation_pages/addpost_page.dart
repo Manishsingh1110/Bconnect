@@ -149,10 +149,12 @@ class _AddpostState extends State<Addpost> {
                   controller: _postTextController,
                   decoration: const InputDecoration(
                     hintText: "What do you want to talk about?",
+                    hintStyle: TextStyle(color: Colors.grey),
                     contentPadding: EdgeInsets.all(16.0),
                     border: InputBorder.none,
                   ),
                   maxLines: null,
+                  autofocus: true,
                 ),
               ),
               const SizedBox(height: 16.0),
