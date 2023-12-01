@@ -7,6 +7,7 @@ import 'package:bconnect/components/socialmediapostcard.dart';
 import 'package:bconnect/models/follower.dart';
 import 'package:bconnect/models/recommendedgroup.dart';
 import 'package:bconnect/models/recommendeduser.dart';
+import 'package:bconnect/pages/Side_Navigation_pages/Main_profilepage.dart';
 import 'package:bconnect/pages/Side_Navigation_pages/setting_page.dart';
 import 'package:bconnect/pages/user_Authentication_pages/login_page.dart';
 import 'package:bconnect/state/state.dart';
@@ -351,30 +352,43 @@ class _ProfileState extends State<Profile> {
                         child: SizedBox(
                           width: size.width - 30,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 5),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  displayName,
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: Align(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 5),
+                                Align(
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    storedUser?['description'] ??
-                                        'No name available',
-                                    softWrap: true,
+                                    displayName,
+                                    textAlign: TextAlign.start,
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
+                                const SizedBox(height: 5),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      storedUser?['description'] ??
+                                          'No name available',
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    // Replace 'companyId' with the actual ID or data needed to identify the company
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const CompanyPage(
+                                            companyId: 'companyId'),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text('View Company Page'),
+                                ),
+                              ]),
                         ),
                       ),
                     ],

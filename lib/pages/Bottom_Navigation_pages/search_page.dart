@@ -257,6 +257,8 @@ class _SearchState extends State<Search> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
+                  maxLines: null,
+                  autofocus: true,
                 )),
             const SizedBox(height: 20.0),
             SingleChildScrollView(
