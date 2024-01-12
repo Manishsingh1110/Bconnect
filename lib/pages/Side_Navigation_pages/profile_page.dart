@@ -299,6 +299,31 @@ class _ProfileState extends State<Profile> {
       );
     }
 
+    ElevatedButton buildCompanyPageButton() {
+      // Check if the "Page" field is empty
+      bool hasCompanyPage =
+          storedUser?['Page'] != null && storedUser?['Page'].isNotEmpty;
+
+      return ElevatedButton(
+        onPressed: () {
+          if (hasCompanyPage) {
+            // Replace 'companyId' with the actual ID or data needed to identify the company
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CompanyPage(companyId: 'companyId'),
+              ),
+            );
+          } else {
+            // Navigate to the AddNewCompanyPage when the button is pressed
+            // You should replace AddNewCompanyPage with the actual page you want to navigate to
+          }
+        },
+        child:
+            Text(hasCompanyPage ? 'View Company Page' : 'Add New Company Page'),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -332,66 +357,56 @@ class _ProfileState extends State<Profile> {
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  height: 200,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [hintColor, hintColor],
                     ),
                   ),
-                  child: Stack(
-                    children: [
-                      const Positioned(
-                        top: 20,
-                        right: 30,
-                        child: Icon(Icons.edit),
-                      ),
-                      Positioned(
-                        top: 64,
-                        left: 30,
-                        child: SizedBox(
-                          width: size.width - 30,
-                          child: Column(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: SizedBox(
+                            width: size.width - 30,
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const SizedBox(height: 5),
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    displayName,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 15),
-                                  child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      storedUser?['description'] ??
-                                          'No name available',
-                                      softWrap: true,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    // Replace 'companyId' with the actual ID or data needed to identify the company
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const CompanyPage(
-                                            companyId: 'companyId'),
+                                const SizedBox(height: 40),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      displayName,
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            20, // Adjust the size as needed
                                       ),
-                                    );
-                                  },
-                                  child: const Text('View Company Page'),
+                                    ),
+                                    const Icon(Icons.edit),
+                                  ],
                                 ),
-                              ]),
+                                const SizedBox(height: 5),
+                                Text(
+                                  storedUser?['description'] ??
+                                      'No name available',
+                                  softWrap: true,
+                                ),
+                                const SizedBox(height: 0),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Positioned(
@@ -410,6 +425,13 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ],
+            ),
+            Center(
+              child: Padding(
+                padding:
+                    const EdgeInsets.all(16.0), // Adjust the value as needed
+                child: buildCompanyPageButton(),
+              ),
             ),
             const SizedBox(height: 2),
             Container(
@@ -433,87 +455,32 @@ class _ProfileState extends State<Profile> {
                     ),
                     const SizedBox(height: 10),
                     AnimatedCrossFade(
-                      firstChild: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  // Show a limited portion of text when not expanded.
-                                  text: storedUser?['aboutus'] ??
-                                      'No about data available',
-                                  style: const TextStyle(),
-                                ),
-                                TextSpan(
-                                  text: "Read More",
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      setState(() {
-                                        isExpanded = true;
-                                      });
-                                    },
-                                ),
-                              ],
-                            ),
-                            maxLines: 3,
-                          ),
-                        ],
-                      ),
-                      secondChild: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  // Show a limited portion of text when not expanded.
-                                  text: storedUser?['aboutus'] ??
-                                      'No about data available',
-                                  style: const TextStyle(),
-                                ),
-                                TextSpan(
-                                  text: "Read Less",
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      setState(() {
-                                        isExpanded = false;
-                                      });
-                                    },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                      firstChild: buildCollapsed(),
+                      secondChild: buildExpanded(),
                       crossFadeState: isExpanded
                           ? CrossFadeState.showSecond
                           : CrossFadeState.showFirst,
-                      duration: const Duration(milliseconds: 100),
+                      duration: const Duration(milliseconds: 300),
                     ),
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 2),
             const SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Text(
-                    "Activities",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+              width: double.infinity,
+              child: Padding(
+                padding: EdgeInsets.all(15),
+                child: Text(
+                  "Activities",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
-                )),
+                ),
+              ),
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -570,5 +537,78 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
+  }
+
+  Widget buildCollapsed() {
+    print("Building collapsed. isExpanded: $isExpanded");
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: getLimitedText(),
+                style: const TextStyle(),
+              ),
+              TextSpan(
+                text: " ... Read More",
+                style: const TextStyle(
+                  color: Colors.blue,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    print("Read More tapped");
+                    setState(() {
+                      isExpanded = true;
+                    });
+                  },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildExpanded() {
+    print("Building expanded. isExpanded: $isExpanded");
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: storedUser?['aboutus'] ?? 'No about data available',
+                style: const TextStyle(),
+              ),
+              TextSpan(
+                text: " Read Less",
+                style: const TextStyle(
+                  color: Colors.blue,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    print("Read Less tapped");
+                    setState(() {
+                      isExpanded = false;
+                    });
+                  },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  String getLimitedText() {
+    // You can implement your logic to limit the number of words here
+    // For example, you can split the text and take the first N words.
+    String originalText = storedUser?['aboutus'] ?? 'No about data available';
+    List<String> words = originalText.split(' ');
+    int maxWords = 20; // Set your desired word limit
+    return words.take(maxWords).join(' ');
   }
 }

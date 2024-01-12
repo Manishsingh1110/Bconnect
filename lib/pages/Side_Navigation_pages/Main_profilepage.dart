@@ -103,55 +103,54 @@ class _CompanyPageState extends State<CompanyPage>
                           clipBehavior: Clip.none,
                           children: [
                             Container(
-                              height: 150,
                               width: double.infinity,
-                              // decoration: BoxDecoration(
-                              //   gradient: LinearGradient(
-                              //     colors: [hintColor, hintColor],
-                              //   ),
-                              // ),
-                              child: Stack(
-                                children: [
-                                  const Positioned(
-                                    top: 20,
-                                    right: 30,
-                                    child: Icon(Icons.edit),
-                                  ),
-                                  Positioned(
-                                    top: 64,
-                                    left: 30,
-                                    child: SizedBox(
-                                      width: size.width - 30,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(height: 5),
-                                          Align(
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              displayName,
-                                              textAlign: TextAlign.start,
+                              child: Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: SizedBox(
+                                        width: size.width - 30,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 40),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  displayName,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        20, // Adjust the size as needed
+                                                  ),
+                                                ),
+                                                const Icon(Icons.edit),
+                                              ],
                                             ),
-                                          ),
-                                          const SizedBox(height: 5),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 15),
-                                            child: Align(
-                                              alignment: Alignment.topLeft,
-                                              child: Text(
-                                                storedUser?['description'] ??
-                                                    'No name available',
-                                                softWrap: true,
-                                              ),
+                                            const SizedBox(height: 5),
+                                            Text(
+                                              storedUser?['description'] ??
+                                                  'No name available',
+                                              softWrap: true,
                                             ),
-                                          ),
-                                        ],
+                                            const SizedBox(height: 0),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                             Positioned(

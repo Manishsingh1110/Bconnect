@@ -2,6 +2,7 @@ import 'package:bconnect/pages/user_Authentication_pages/login_page.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:lottie/lottie.dart';
+import 'package:bconnect/Layout/landing.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -37,21 +38,20 @@ class _SplashScreenState extends State<SplashScreen>
                   colors: [Colors.blue, Colors.purple],
                   begin: Alignment.topRight,
                   end: Alignment.bottomRight)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, 
-            children: [
-            Lottie.asset(
-                'assets/images/lottie.json',
-                controller: _controller,
-                 onLoaded: (compos) {
-              
-               _controller
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Lottie.asset('assets/images/lottie.json', controller: _controller,
+                onLoaded: (compos) {
+              _controller
                 ..duration = compos.duration
-                ..forward().then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const Login())));
+                ..forward().then((value) => Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const Landing())));
             }),
             const SizedBox(height: 40),
             const Text("Let's Be connected ",
-            style: TextStyle(fontSize: 20,fontWeight: FontWeight.w800,color: Colors.white))
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white))
           ])),
     );
   }

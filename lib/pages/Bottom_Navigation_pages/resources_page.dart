@@ -1,4 +1,4 @@
-import 'package:bconnect/components/rawmaterial.dart';
+import 'package:bconnect/components/rawmaterial_second.dart';
 import 'package:flutter/material.dart';
 
 class Resources extends StatefulWidget {
@@ -103,6 +103,6 @@ class _ResourcesState extends State<Resources> {
       },
     ];
 
-    return RawMaterialsList(rawMaterials: rawMaterials);
+    return RawMaterialsListSecond(rawMaterials: rawMaterials);
   }
 }
