@@ -21,7 +21,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
     Widget postContent;
     bool isLiked = false;
 
-    if (widget.post.postImages != null) {
+    if (widget.post.postImages != null && widget.post.postImages!.isNotEmpty) {
       if (widget.post.postImages!.length == 1) {
         postContent = Hero(
           tag: widget.post.postImages![0], // Unique tag for the image
@@ -483,9 +483,7 @@ class _SocialMediaPostCard extends State<SocialMediaPostCard> {
               child: Text(
                 widget.post.postText,
                 style: const TextStyle(fontSize: 16.0),
-                maxLines: 3, // Limit the number of lines displayed
-                overflow:
-                    TextOverflow.ellipsis, // Show ellipsis for overflowed text
+                // Show ellipsis for overflowed text
               ),
             ),
             postContent,

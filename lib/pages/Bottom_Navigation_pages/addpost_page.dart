@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:lottie/lottie.dart';
 
 class Addpost extends StatefulWidget {
   const Addpost({Key? key}) : super(key: key);
@@ -202,11 +203,16 @@ class _AddpostState extends State<Addpost> {
         if (isLoading)
           Container(
             color:
-                Colors.black.withOpacity(0.5), // Adjust opacity for blur effect
+                Colors.black.withOpacity(0.7), // Adjust opacity for blur effect
             child: Center(
-              child: customLoadingIndicator(),
-            ),
-          )
+                child: Center(
+                    child: Lottie.asset(
+              'assets/images/lottie2.json', // replace 'assets/loading_animation.json' with the path to your Lottie animation file
+              width: 400,
+              height: 300,
+              fit: BoxFit.fill,
+            ))),
+          ),
       ]),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.center,

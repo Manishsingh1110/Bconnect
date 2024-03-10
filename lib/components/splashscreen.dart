@@ -2,7 +2,6 @@ import 'package:bconnect/pages/user_Authentication_pages/login_page.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:lottie/lottie.dart';
-import 'package:bconnect/Layout/landing.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -44,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen>
               _controller
                 ..duration = compos.duration
                 ..forward().then((value) => Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Landing())));
+                    MaterialPageRoute(builder: (context) => const Login())));
             }),
             const SizedBox(height: 40),
             const Text("Let's Be connected ",

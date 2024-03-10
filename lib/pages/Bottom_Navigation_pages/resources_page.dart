@@ -1,8 +1,12 @@
 import 'package:bconnect/components/rawmaterial_second.dart';
+import 'package:bconnect/models/product.dart';
+import 'package:bconnect/state/state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:lottie/lottie.dart';
 
 class Resources extends StatefulWidget {
-  const Resources({super.key});
+  const Resources({Key? key}) : super(key: key);
 
   @override
   State<Resources> createState() => _ResourcesState();
@@ -10,99 +14,51 @@ class Resources extends StatefulWidget {
 
 class _ResourcesState extends State<Resources> {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-            alignment: Alignment.center, child: _buildRawMaterials()));
+  void initState() {
+    super.initState();
+    // Initialize the data fetching when the widget is initialized
+    if (Provider.of<ByproductListModel>(context, listen: false)
+        .byproducts
+        .isEmpty) {
+      Provider.of<ByproductListModel>(context, listen: false).initData();
+    }
   }
 
-  Widget _buildRawMaterials() {
-    final rawMaterials = [
-      {
-        'name': 'Iron Ore',
-        'description': 'High-quality iron ore suitable for steel production.',
-        'image':
-            'https://worldsteel.org/wp-content/uploads/iStock-545354738-690x360.jpg',
-        'price': 35.50,
-        'supplier': 'Ore Mining Company A',
-      },
-      {
-        'name': 'Copper Ingot',
-        'description': 'Pure copper ingots for electrical applications.',
-        'image':
-            'https://worldsteel.org/wp-content/uploads/iStock-545354738-690x360.jpg',
-        'price': 42.75,
-        'supplier': 'Metal Works Inc.',
-      },
-      {
-        'name': 'Lumber',
-        'description': 'Quality lumber sourced from sustainable forests.',
-        'image':
-            'https://worldsteel.org/wp-content/uploads/iStock-545354738-690x360.jpg',
-        'price': 20.00,
-        'supplier': 'Green Woods Co.',
-      },
-      {
-        'name': 'Aluminum Sheet',
-        'description': 'Lightweight aluminum sheets for construction.',
-        'image':
-            'https://worldsteel.org/wp-content/uploads/iStock-545354738-690x360.jpg',
-        'price': 30.80,
-        'supplier': 'Aluminum Industries Ltd.',
-      },
-      {
-        'name': 'Plastic Pellets',
-        'description':
-            'Recycled plastic pellets for various manufacturing purposes.',
-        'image':
-            'https://worldsteel.org/wp-content/uploads/iStock-545354738-690x360.jpg',
-        'price': 15.25,
-        'supplier': 'Eco Plastics Corp.',
-      },
-      {
-        'name': 'Steel Beam',
-        'description':
-            'Durable steel beams for structural engineering projects.',
-        'image':
-            'https://worldsteel.org/wp-content/uploads/iStock-545354738-690x360.jpg',
-        'price': 55.00,
-        'supplier': 'Steel Dynamics Co.',
-      },
-      {
-        'name': 'Rubber Sheet',
-        'description':
-            'Flexible rubber sheets used in automotive applications.',
-        'image':
-            'https://worldsteel.org/wp-content/uploads/iStock-545354738-690x360.jpg',
-        'price': 12.50,
-        'supplier': 'RubberTech Inc.',
-      },
-      {
-        'name': 'Glass Panel',
-        'description': 'Clear glass panels for architectural design.',
-        'image':
-            'https://worldsteel.org/wp-content/uploads/iStock-545354738-690x360.jpg',
-        'price': 18.90,
-        'supplier': 'Crystal Glassworks Ltd.',
-      },
-      {
-        'name': 'Cement Bag',
-        'description': 'High-quality cement bags for construction projects.',
-        'image':
-            'https://worldsteel.org/wp-content/uploads/iStock-545354738-690x360.jpg',
-        'price': 25.50,
-        'supplier': 'Builders Supply Co.',
-      },
-      {
-        'name': 'Circuit Board',
-        'description': 'Advanced circuit boards for electronic devices.',
-        'image':
-            'https://worldsteel.org/wp-content/uploads/iStock-545354738-690x360.jpg',
-        'price': 40.00,
-        'supplier': 'Tech Components Ltd.',
-      },
-    ];
+  @override
+  Widget build(BuildContext context) {
+    // Retrieve the list of byproducts from the provider
+    List<Byproduct> byproducts =
+        Provider.of<ByproductListModel>(context).byproducts;
 
-    return RawMaterialsListSecond(rawMaterials: rawMaterials);
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
+        child: _buildByproductsList(byproducts),
+      ),
+    );
+  }
+
+  Widget _buildByproductsList(List<Byproduct> byproducts) {
+    if (byproducts.isEmpty) {
+      return Container(
+        color: Colors.black.withOpacity(0.1), // Adjust opacity for blur effect
+        child: Center(
+            child: Center(
+                child: Lottie.asset(
+          'assets/images/lottie3.json', // replace 'assets/loading_animation.json' with the path to your Lottie animation file
+          width: 400,
+          height: 300,
+          fit: BoxFit.fill,
+        ))),
+      );
+    } else {
+      return RefreshIndicator(
+          onRefresh: () async {
+            // Call initData to fetch data when the user pulls to refresh
+            await Provider.of<ByproductListModel>(context, listen: false)
+                .initData();
+          },
+          child: RawMaterialsListSecond(byproducts: byproducts));
+    }
   }
 }

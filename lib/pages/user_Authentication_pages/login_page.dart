@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:bconnect/Layout/landing.dart';
 import 'package:bconnect/pages/user_Authentication_pages/signup_page.dart';
 import "package:flutter/material.dart";
@@ -9,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:bconnect/state/state.dart';
+import 'package:lottie/lottie.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -96,7 +95,11 @@ class _Login extends State<Login> {
                   overflowAlignment: OverflowBarAlignment.center,
                   children: [
                     SizedBox(height: size.height * 0.04),
-                    Image.asset(image1),
+                    Lottie.asset(
+                      'assets/images/login.json', // Replace with your Lottie animation file path
+                      width: 500, // Adjust width as needed
+                      height: 250, // Adjust height as needed
+                    ),
                     Text(
                       "Welcome Back!",
                       textAlign: TextAlign.center,
@@ -246,10 +249,15 @@ class _Login extends State<Login> {
           if (isLoading)
             Container(
               color: Colors.black
-                  .withOpacity(0.5), // Adjust opacity for blur effect
+                  .withOpacity(0.7), // Adjust opacity for blur effect
               child: Center(
-                child: customLoadingIndicator(),
-              ),
+                  child: Center(
+                      child: Lottie.asset(
+                'assets/images/lottie2.json', // replace 'assets/loading_animation.json' with the path to your Lottie animation file
+                width: 400,
+                height: 300,
+                fit: BoxFit.fill,
+              ))),
             ),
         ]));
   }

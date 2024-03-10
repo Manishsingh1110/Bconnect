@@ -1,3 +1,4 @@
+import 'package:bconnect/components/CreatePageForm.dart';
 import 'package:bconnect/components/allfollowers.dart';
 import 'package:bconnect/components/allpost.dart';
 import 'package:bconnect/components/followercard.dart';
@@ -315,8 +316,13 @@ class _ProfileState extends State<Profile> {
               ),
             );
           } else {
-            // Navigate to the AddNewCompanyPage when the button is pressed
-            // You should replace AddNewCompanyPage with the actual page you want to navigate to
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    CreatePageForm(userid: storedUser?['_id']),
+              ),
+            );
           }
         },
         child:
@@ -385,7 +391,7 @@ class _ProfileState extends State<Profile> {
                                     Text(
                                       displayName,
                                       textAlign: TextAlign.start,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize:
                                             20, // Adjust the size as needed
@@ -427,11 +433,13 @@ class _ProfileState extends State<Profile> {
               ],
             ),
             Center(
-              child: Padding(
-                padding:
-                    const EdgeInsets.all(16.0), // Adjust the value as needed
-                child: buildCompanyPageButton(),
-              ),
+              child: storedUser?['profileType'] ==
+                      'company' // Assuming 'company' is the profile type for companies
+                  ? Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: buildCompanyPageButton(),
+                    )
+                  : const SizedBox(), // Or any other widget you want to show when the condition is not met
             ),
             const SizedBox(height: 2),
             Container(
@@ -540,7 +548,6 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget buildCollapsed() {
-    print("Building collapsed. isExpanded: $isExpanded");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -572,7 +579,6 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget buildExpanded() {
-    print("Building expanded. isExpanded: $isExpanded");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

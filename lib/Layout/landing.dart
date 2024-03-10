@@ -53,10 +53,14 @@ class _LandingState extends State<Landing> {
       ),
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: const Text("B-Connect"),
+        title: const Text("B-Connect", style: TextStyle(color: Colors.white)),
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
-            icon: const Icon(Icons.chat),
+            icon: const Icon(
+              Icons.chat,
+              color: Colors.white,
+            ),
             tooltip: 'Open Chat',
             onPressed: () {
               Navigator.push(
@@ -205,13 +209,13 @@ class NavDrawer extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 10),
                     CircleAvatar(
                       radius: 35, // Reduce the size of the avatar
                       backgroundImage: NetworkImage(
                           userAvatarUrl), // Use NetworkImage for online image
                     ),
-                    const SizedBox(width: 15),
+                    const SizedBox(width: 10),
                     Text(
                       userName,
                       style: const TextStyle(
@@ -220,7 +224,7 @@ class NavDrawer extends StatelessWidget {
                     ),
                     const SizedBox(
                         height:
-                            15), // Add spacing between name and "View Profile"
+                            10), // Add spacing between name and "View Profile"
                     const Text(
                       'View Profile',
                       style: TextStyle(
@@ -275,9 +279,15 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Logout'),
-            onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const Login()));
+            onTap: () async {
+              final userLogin = Userlogin();
+              await userLogin
+                  .deleteUser(); // Remove stored user data and JWT token
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const Login()),
+              );
             },
           ),
         ],

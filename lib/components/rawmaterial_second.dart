@@ -1,5 +1,4 @@
-// ignore_for_file: avoid_unnecessary_containers, library_private_types_in_public_api
-
+import 'package:bconnect/models/product.dart';
 import 'package:flutter/material.dart';
 
 class RawMaterialCard extends StatelessWidget {
@@ -8,11 +7,15 @@ class RawMaterialCard extends StatelessWidget {
   final String rawMaterialImage;
   final double rawMaterialPrice;
   final String rawMaterialSupplier;
+  final String rawMaterialuserimage;
+  final String rawMaterialtimeago;
 
   const RawMaterialCard({
     Key? key,
     required this.rawMaterialName,
     required this.rawMaterialDescription,
+    required this.rawMaterialuserimage,
+    required this.rawMaterialtimeago,
     required this.rawMaterialImage,
     required this.rawMaterialPrice,
     required this.rawMaterialSupplier,
@@ -28,9 +31,21 @@ class RawMaterialCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          ListTile(
+            leading: CircleAvatar(
+              // ignore: unnecessary_null_comparison
+              backgroundImage: rawMaterialuserimage != null
+                  ? NetworkImage(rawMaterialuserimage) as ImageProvider
+                  : const AssetImage('fallback_image_path'),
+            ),
+            title: Text(rawMaterialSupplier),
+            subtitle: Text(rawMaterialtimeago),
+          ),
+          const Divider(
+            height: 1,
+            color: Colors.grey,
+          ),
           ClipRRect(
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(10.0)),
             child: Center(
               child: Image.network(
                 rawMaterialImage,
@@ -84,25 +99,10 @@ class RawMaterialCard extends StatelessWidget {
   }
 }
 
-class RawMaterialsListSecond extends StatefulWidget {
-  final List<Map<String, dynamic>> rawMaterials;
-
-  const RawMaterialsListSecond({Key? key, required this.rawMaterials})
+class RawMaterialsListSecond extends StatelessWidget {
+  final List<Byproduct> byproducts;
+  const RawMaterialsListSecond({Key? key, required this.byproducts})
       : super(key: key);
-
-  @override
-  _RawMaterialsListState createState() => _RawMaterialsListState();
-}
-
-class _RawMaterialsListState extends State<RawMaterialsListSecond> {
-  List<Map<String, dynamic>> filteredRawMaterials = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize filteredRawMaterials with the original list
-    filteredRawMaterials = List.from(widget.rawMaterials);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,16 +110,17 @@ class _RawMaterialsListState extends State<RawMaterialsListSecond> {
       children: [
         Expanded(
           child: ListView.builder(
-            itemCount: filteredRawMaterials.length,
+            itemCount: byproducts.length,
             itemBuilder: (context, index) {
-              final rawMaterial = filteredRawMaterials[index];
+              final byproduct = byproducts[index];
               return RawMaterialCard(
-                rawMaterialName: rawMaterial['name'] ?? '',
-                rawMaterialDescription: rawMaterial['description'] ?? '',
-                rawMaterialImage:
-                    rawMaterial['image'] ?? 'assets/images/default_image.jpg',
-                rawMaterialPrice: rawMaterial['price'] ?? 0.0,
-                rawMaterialSupplier: rawMaterial['supplier'] ?? 'Supplier Name',
+                rawMaterialName: byproduct.name,
+                rawMaterialDescription: byproduct.description,
+                rawMaterialImage: byproduct.image,
+                rawMaterialPrice: byproduct.price,
+                rawMaterialSupplier: byproduct.supplier,
+                rawMaterialuserimage: byproduct.userImage,
+                rawMaterialtimeago: byproduct.timeAgo,
               );
             },
           ),

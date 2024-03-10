@@ -1,19 +1,24 @@
 // ignore_for_file: avoid_unnecessary_containers, file_names, library_private_types_in_public_api
 
+import 'package:bconnect/components/addproduct.dart';
 import 'package:flutter/material.dart';
 
 class ByProductCard extends StatelessWidget {
   final String byProductName;
   final String byProductDescription;
   final String byProductImage;
+  final String byProductprofile;
   final double byProductPrice;
   final String byProductSupplier;
+  final String byProducttime;
 
   const ByProductCard({
     Key? key,
     required this.byProductName,
+    required this.byProducttime,
     required this.byProductDescription,
     required this.byProductImage,
+    required this.byProductprofile,
     required this.byProductPrice,
     required this.byProductSupplier,
   }) : super(key: key);
@@ -86,8 +91,10 @@ class ByProductCard extends StatelessWidget {
 
 class ByProductsList extends StatefulWidget {
   final List<Map<String, dynamic>> byProducts;
-
-  const ByProductsList({Key? key, required this.byProducts}) : super(key: key);
+  final String groupid;
+  const ByProductsList(
+      {Key? key, required this.byProducts, required this.groupid})
+      : super(key: key);
 
   @override
   _ByProductsListState createState() => _ByProductsListState();
@@ -174,8 +181,11 @@ class _ByProductsListState extends State<ByProductsList> {
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                // Handle add icon click
-                // Implement your logic here
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            AddProduct(groupid: widget.groupid)));
               },
             ),
           ],
@@ -191,7 +201,10 @@ class _ByProductsListState extends State<ByProductsList> {
                 byProductImage:
                     byProduct['image'] ?? 'assets/images/default_image.jpg',
                 byProductPrice: byProduct['price'] ?? 0.0,
+                byProducttime: byProduct['timeAgo'] ?? "0.0",
                 byProductSupplier: byProduct['supplier'] ?? 'Supplier Name',
+                byProductprofile:
+                    byProduct['userImage'] ?? 'assets/images/default_image.jpg',
               );
             },
           ),

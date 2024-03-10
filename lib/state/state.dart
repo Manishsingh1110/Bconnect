@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bconnect/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:bconnect/models/group.dart';
@@ -25,6 +26,14 @@ class Userlogin extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final storedJwtToken = prefs.getString('jwtToken');
     return storedJwtToken;
+  }
+
+  // Method to delete stored user data and JWT token
+  Future<void> deleteUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('customerData');
+    await prefs.remove('jwtToken');
+    notifyListeners();
   }
 }
 
@@ -215,6 +224,42 @@ class ThemeProvider with ChangeNotifier {
 
   void toggleTheme() {
     _useManualTheme = !_useManualTheme;
+    notifyListeners();
+  }
+}
+
+class ByproductListModel extends ChangeNotifier {
+  List<Byproduct> _byproducts = [];
+  List<Byproduct> get byproducts => _byproducts;
+
+  Future<void> fetchData() async {
+    print('Fetching data...');
+    final Uri apiUrl =
+        Uri.parse('https://bconnect-backend-main.onrender.com/app/getproduct');
+    notifyListeners();
+
+    final response = await http.get(apiUrl);
+    if (response.statusCode == 200) {
+      print('Data fetched successfully');
+      final List<dynamic> responseData = json.decode(response.body);
+      final List<Byproduct> byproductList =
+          responseData.map((data) => Byproduct.fromJson(data)).toList();
+      setByproductData(byproductList);
+      notifyListeners();
+    } else {
+      print('Failed to load data');
+      throw Exception('Failed to load data');
+    }
+  }
+
+  // This method can be called to initialize the data fetching
+  Future<void> initData() async {
+    await fetchData();
+  }
+
+  void setByproductData(List<Byproduct> newData) {
+    _byproducts = newData;
+    print('Data set successfully');
     notifyListeners();
   }
 }

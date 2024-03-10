@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers, library_private_types_in_public_api
 
+import 'package:bconnect/components/addresource.dart';
 import 'package:flutter/material.dart';
 
 class RawMaterialCard extends StatelessWidget {
@@ -86,8 +87,9 @@ class RawMaterialCard extends StatelessWidget {
 
 class RawMaterialsList extends StatefulWidget {
   final List<Map<String, dynamic>> rawMaterials;
-
-  const RawMaterialsList({Key? key, required this.rawMaterials})
+  final String groupid;
+  const RawMaterialsList(
+      {Key? key, required this.rawMaterials, required this.groupid})
       : super(key: key);
 
   @override
@@ -105,8 +107,6 @@ class _RawMaterialsListState extends State<RawMaterialsList> {
   }
 
   void _applyFilter(String filterOption) {
-    // Implement your filter logic here based on the selected option
-    // This is a placeholder, replace it with your actual filter logic
     setState(() {
       filteredRawMaterials = widget.rawMaterials
           .where((rawMaterial) => rawMaterial['filterOption'] == filterOption)
@@ -115,8 +115,6 @@ class _RawMaterialsListState extends State<RawMaterialsList> {
   }
 
   void _applySort(String sortOption) {
-    // Implement your sorting logic here based on the selected option
-    // This is a placeholder, replace it with your actual sorting logic
     setState(() {
       filteredRawMaterials
           .sort((a, b) => a['sortOption'].compareTo(b['sortOption']));
@@ -175,8 +173,10 @@ class _RawMaterialsListState extends State<RawMaterialsList> {
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                // Handle add icon click
-                // Implement your logic here
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddResources()));
               },
             ),
           ],
@@ -186,6 +186,7 @@ class _RawMaterialsListState extends State<RawMaterialsList> {
             itemCount: filteredRawMaterials.length,
             itemBuilder: (context, index) {
               final rawMaterial = filteredRawMaterials[index];
+              print(rawMaterial);
               return RawMaterialCard(
                 rawMaterialName: rawMaterial['name'] ?? '',
                 rawMaterialDescription: rawMaterial['description'] ?? '',

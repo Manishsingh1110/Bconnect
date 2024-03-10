@@ -15,6 +15,13 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (context) {
+          var notifier = ByproductListModel();
+          notifier.initData(); // Initialize data fetching
+          return notifier;
+        },
+      ),
+      ChangeNotifierProvider(
+        create: (context) {
           var notifier = GroupListModel();
           notifier.initData(); // Initialize data fetching
           return notifier;
