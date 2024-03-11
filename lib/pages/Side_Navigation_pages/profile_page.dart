@@ -565,7 +565,6 @@ class _ProfileState extends State<Profile> {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    print("Read More tapped");
                     setState(() {
                       isExpanded = true;
                     });
@@ -596,7 +595,6 @@ class _ProfileState extends State<Profile> {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    print("Read Less tapped");
                     setState(() {
                       isExpanded = false;
                     });

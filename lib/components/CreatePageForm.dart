@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'dart:io';
 import 'package:bconnect/pages/user_Authentication_pages/login_page.dart';
 import 'package:bconnect/state/state.dart';
@@ -70,8 +71,6 @@ class _CreatePageFormState extends State<CreatePageForm> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const Login()));
       } else {
-        // Error occurred
-        print('Failed to create page. Status code: ${response.statusCode}');
         // Handle error
         setState(() {
           _isLoading = false;

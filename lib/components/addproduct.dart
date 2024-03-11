@@ -191,7 +191,6 @@ class _AddProductState extends State<AddProduct> {
         isLoading = false;
       });
       // Handle exceptions
-      print('Error creating byproduct: $e');
     }
 
     // Clear the form

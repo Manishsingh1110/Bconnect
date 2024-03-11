@@ -186,7 +186,6 @@ class _RawMaterialsListState extends State<RawMaterialsList> {
             itemCount: filteredRawMaterials.length,
             itemBuilder: (context, index) {
               final rawMaterial = filteredRawMaterials[index];
-              print(rawMaterial);
               return RawMaterialCard(
                 rawMaterialName: rawMaterial['name'] ?? '',
                 rawMaterialDescription: rawMaterial['description'] ?? '',

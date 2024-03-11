@@ -178,6 +178,7 @@ class _AddResourcesState extends State<AddResources> {
           isLoading = false;
         });
         // Pop the current screen and navigate back to the previous screen
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
       } else {
         setState(() {

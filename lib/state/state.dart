@@ -233,21 +233,18 @@ class ByproductListModel extends ChangeNotifier {
   List<Byproduct> get byproducts => _byproducts;
 
   Future<void> fetchData() async {
-    print('Fetching data...');
     final Uri apiUrl =
         Uri.parse('https://bconnect-backend-main.onrender.com/app/getproduct');
     notifyListeners();
 
     final response = await http.get(apiUrl);
     if (response.statusCode == 200) {
-      print('Data fetched successfully');
       final List<dynamic> responseData = json.decode(response.body);
       final List<Byproduct> byproductList =
           responseData.map((data) => Byproduct.fromJson(data)).toList();
       setByproductData(byproductList);
       notifyListeners();
     } else {
-      print('Failed to load data');
       throw Exception('Failed to load data');
     }
   }
@@ -259,7 +256,6 @@ class ByproductListModel extends ChangeNotifier {
 
   void setByproductData(List<Byproduct> newData) {
     _byproducts = newData;
-    print('Data set successfully');
     notifyListeners();
   }
 }

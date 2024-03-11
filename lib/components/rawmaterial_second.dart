@@ -1,3 +1,4 @@
+import 'package:bconnect/components/RawMaterialDetailPage.dart';
 import 'package:bconnect/models/product.dart';
 import 'package:flutter/material.dart';
 
@@ -23,79 +24,98 @@ class RawMaterialCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            leading: CircleAvatar(
-              // ignore: unnecessary_null_comparison
-              backgroundImage: rawMaterialuserimage != null
-                  ? NetworkImage(rawMaterialuserimage) as ImageProvider
-                  : const AssetImage('fallback_image_path'),
-            ),
-            title: Text(rawMaterialSupplier),
-            subtitle: Text(rawMaterialtimeago),
-          ),
-          const Divider(
-            height: 1,
-            color: Colors.grey,
-          ),
-          ClipRRect(
-            child: Center(
-              child: Image.network(
-                rawMaterialImage,
-                width: double.infinity,
-                height: 150.0,
-                fit: BoxFit.cover,
+    return GestureDetector(
+        onTap: () {
+          // Navigate to the detail page and pass the data
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RawMaterialDetailPage(
+                rawMaterialName: rawMaterialName,
+                rawMaterialDescription: rawMaterialDescription,
+                rawMaterialUserImage: rawMaterialuserimage,
+                rawMaterialTimeAgo: rawMaterialtimeago,
+                rawMaterialImage: rawMaterialImage,
+                rawMaterialPrice: rawMaterialPrice,
+                rawMaterialSupplier: rawMaterialSupplier,
               ),
             ),
+          );
+        },
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  rawMaterialName,
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                leading: CircleAvatar(
+                  // ignore: unnecessary_null_comparison
+                  backgroundImage: rawMaterialuserimage != null
+                      ? NetworkImage(rawMaterialuserimage) as ImageProvider
+                      : const AssetImage('fallback_image_path'),
+                ),
+                title: Text(rawMaterialSupplier),
+                subtitle: Text(rawMaterialtimeago),
+              ),
+              const Divider(
+                height: 1,
+                color: Colors.grey,
+              ),
+              ClipRRect(
+                child: Center(
+                  child: Image.network(
+                    rawMaterialImage,
+                    width: double.infinity,
+                    height: 150.0,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                const SizedBox(height: 8.0),
-                Text(
-                  rawMaterialDescription,
-                  style: const TextStyle(fontSize: 14.0),
-                ),
-                const SizedBox(height: 8.0),
-                Row(
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Price: \$${rawMaterialPrice.toStringAsFixed(2)}',
+                      rawMaterialName,
                       style: const TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.green,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(width: 16.0), // Adjust the spacing as needed
+                    const SizedBox(height: 8.0),
                     Text(
-                      'Supplier: $rawMaterialSupplier',
+                      rawMaterialDescription,
                       style: const TextStyle(fontSize: 14.0),
+                    ),
+                    const SizedBox(height: 8.0),
+                    Row(
+                      children: [
+                        Text(
+                          'Price: \$${rawMaterialPrice.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                            width: 16.0), // Adjust the spacing as needed
+                        Text(
+                          'Supplier: $rawMaterialSupplier',
+                          style: const TextStyle(fontSize: 14.0),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 }
 
