@@ -11,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Userlogin extends ChangeNotifier {
-  // Method to retrieve user data from shared preferences
   Future<Map<String, dynamic>?> retrieveUser() async {
     final prefs = await SharedPreferences.getInstance();
     final storedCustomerData = prefs.getString('customerData');

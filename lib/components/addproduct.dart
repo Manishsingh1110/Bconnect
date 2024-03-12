@@ -1,7 +1,13 @@
+import 'dart:io';
+
+import 'package:bconnect/pages/Side_Navigation_pages/profile_page.dart';
+import 'package:bconnect/state/state.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class AddProduct extends StatefulWidget {
   final String groupid;
@@ -14,7 +20,7 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  String? selectedImagePath; // Holds the selected image path
+  File? selectedImageFile; // Holds the selected image file
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _supplierController = TextEditingController();
   bool isLoading = false;
@@ -61,7 +67,7 @@ class _AddProductState extends State<AddProduct> {
                   child: Stack(
                     alignment: Alignment.bottomRight,
                     children: [
-                      selectedImagePath == null
+                      selectedImageFile == null
                           ? Container(
                               width: double.infinity,
                               height: 200,
@@ -72,8 +78,8 @@ class _AddProductState extends State<AddProduct> {
                                 color: Colors.grey,
                               ),
                             )
-                          : Image.network(
-                              selectedImagePath!,
+                          : Image.file(
+                              selectedImageFile!, // Use the picked image file directly
                               width: double.infinity,
                               height: 200,
                               fit: BoxFit.cover,
@@ -115,16 +121,15 @@ class _AddProductState extends State<AddProduct> {
           ),
           if (isLoading)
             Container(
-              color: Colors.black
-                  .withOpacity(0.7), // Adjust opacity for blur effect
+              color: Colors.black.withOpacity(0.7),
               child: Center(
-                  child: Center(
-                      child: Lottie.asset(
-                'assets/images/lottie2.json', // replace 'assets/loading_animation.json' with the path to your Lottie animation file
-                width: 400,
-                height: 300,
-                fit: BoxFit.fill,
-              ))),
+                child: Lottie.asset(
+                  'assets/images/lottie2.json',
+                  width: 400,
+                  height: 300,
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
         ],
       ),
@@ -137,7 +142,7 @@ class _AddProductState extends State<AddProduct> {
 
     if (pickedImage != null) {
       setState(() {
-        selectedImagePath = pickedImage.path;
+        selectedImageFile = File(pickedImage.path); // Store picked image file
       });
     }
   }
@@ -149,11 +154,13 @@ class _AddProductState extends State<AddProduct> {
     setState(() {
       isLoading = true;
     });
+    final Userlogin userLogin = Userlogin();
     try {
       // Define the API endpoint for creating a new byproduct
       const apiUrl =
           'https://bconnect-backend-main.onrender.com/app/createbyproduct';
 
+      final String? jwtToken = await userLogin.retrieveJwt();
       // Create a FormData object for sending multipart/form-data
       final formData = http.MultipartRequest('POST', Uri.parse(apiUrl));
 
@@ -164,11 +171,15 @@ class _AddProductState extends State<AddProduct> {
         'price': price.toString(),
         'supplier': widget.groupid,
       });
+      formData.headers.addAll({
+        'Content-Type': 'application/json',
+        'auth-token': jwtToken!,
+      });
       // Add image file to the FormData
-      if (selectedImagePath != null) {
+      if (selectedImageFile != null) {
         formData.files.add(await http.MultipartFile.fromPath(
           'image',
-          selectedImagePath!,
+          selectedImageFile!.path,
         ));
       }
 
@@ -179,9 +190,23 @@ class _AddProductState extends State<AddProduct> {
         setState(() {
           isLoading = false;
         });
+        await userLogin.deleteUser();
+        final customerData = jsonDecode(response.body)['customer'];
         // ignore: use_build_context_synchronously
-        Navigator.pop(context);
+        print(customerData);
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('customerData', jsonEncode(customerData));
+          setState(() {
+            isLoading = false;
+          });
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Profile()));
+          // ignore: empty_catches
+        } catch (e) {}
+        // ignore: use_build_context_synchronously
       } else {
+        print("elses");
         setState(() {
           isLoading = false;
         });
@@ -200,7 +225,7 @@ class _AddProductState extends State<AddProduct> {
   void _clearForm() {
     _nameController.clear();
     _descriptionController.clear();
-    selectedImagePath = null; // Clear selected image path
+    selectedImageFile = null; // Clear selected image file
     _priceController.clear();
     _supplierController.clear();
   }

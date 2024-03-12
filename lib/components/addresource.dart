@@ -1,7 +1,12 @@
+import 'dart:io';
+import 'package:bconnect/pages/Side_Navigation_pages/profile_page.dart';
+import 'package:bconnect/state/state.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class AddResources extends StatefulWidget {
   const AddResources({Key? key}) : super(key: key);
@@ -13,7 +18,7 @@ class AddResources extends StatefulWidget {
 class _AddResourcesState extends State<AddResources> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  String? selectedImagePath; // Holds the selected image path
+  File? selectedImageFile; // Holds the selected image file
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _supplierController = TextEditingController();
   bool isLoading = false;
@@ -60,7 +65,7 @@ class _AddResourcesState extends State<AddResources> {
                   child: Stack(
                     alignment: Alignment.bottomRight,
                     children: [
-                      selectedImagePath == null
+                      selectedImageFile == null
                           ? Container(
                               width: double.infinity,
                               height: 200,
@@ -71,8 +76,8 @@ class _AddResourcesState extends State<AddResources> {
                                 color: Colors.grey,
                               ),
                             )
-                          : Image.network(
-                              selectedImagePath!,
+                          : Image.file(
+                              selectedImageFile!, // Use the picked image file directly
                               width: double.infinity,
                               height: 200,
                               fit: BoxFit.cover,
@@ -114,16 +119,15 @@ class _AddResourcesState extends State<AddResources> {
           ),
           if (isLoading)
             Container(
-              color: Colors.black
-                  .withOpacity(0.7), // Adjust opacity for blur effect
+              color: Colors.black.withOpacity(0.7),
               child: Center(
-                  child: Center(
-                      child: Lottie.asset(
-                'assets/images/lottie2.json', // replace 'assets/loading_animation.json' with the path to your Lottie animation file
-                width: 400,
-                height: 300,
-                fit: BoxFit.fill,
-              ))),
+                child: Lottie.asset(
+                  'assets/images/lottie2.json',
+                  width: 400,
+                  height: 300,
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
         ],
       ),
@@ -136,7 +140,7 @@ class _AddResourcesState extends State<AddResources> {
 
     if (pickedImage != null) {
       setState(() {
-        selectedImagePath = pickedImage.path;
+        selectedImageFile = File(pickedImage.path); // Store picked image file
       });
     }
   }
@@ -144,22 +148,18 @@ class _AddResourcesState extends State<AddResources> {
   void _submitForm() async {
     String name = _nameController.text;
     String description = _descriptionController.text;
-    String image = selectedImagePath ?? ''; // Use selected image path
+    String image = selectedImageFile?.path ?? ''; // Use selected image path
     double price = double.tryParse(_priceController.text) ?? 0.0;
     String supplier = _supplierController.text;
     setState(() {
       isLoading = true;
     });
-
+    final Userlogin userLogin = Userlogin();
     try {
-      // Define the API endpoint for creating a new resource
       const apiUrl =
           'https://bconnect-backend-main.onrender.com/app/createrawmaterial';
-
-      // Create a FormData object for sending multipart/form-data
+      final String? jwtToken = await userLogin.retrieveJwt();
       final formData = http.MultipartRequest('POST', Uri.parse(apiUrl));
-
-      // Add fields to the FormData
       formData.fields.addAll({
         'name': name,
         'description': description,
@@ -167,19 +167,27 @@ class _AddResourcesState extends State<AddResources> {
         'price': price.toString(),
         'supplier': supplier,
       });
+      formData.headers.addAll({
+        'Content-Type': 'application/json',
+        'auth-token': jwtToken!,
+      });
 
       final response = await http.Response.fromStream(await formData.send());
-
-      // Check if the request was successful (status code 2xx)
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        // Handle success
-        // Clear the form
         setState(() {
           isLoading = false;
         });
-        // Pop the current screen and navigate back to the previous screen
+
+        await userLogin.deleteUser();
+        final customerData = jsonDecode(response.body)['customer'];
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('customerData', jsonEncode(customerData));
+          // ignore: empty_catches
+        } catch (e) {}
         // ignore: use_build_context_synchronously
-        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const Profile()));
       } else {
         setState(() {
           isLoading = false;
